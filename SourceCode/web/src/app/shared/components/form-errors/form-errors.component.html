@@ -1,0 +1,67 @@
+<small [class.p-error]="!!control && control.invalid" *ngIf="!!control && control.touched && control.invalid && control.errors">
+  <ng-container *ngFor="let error of Object.keys(control.errors)">
+    <!-- Hide error for Following -->
+    <ng-container *ngIf="!hideErrorFor.includes(error) && !Object.keys(message).includes(error)" [ngSwitch]="error">
+      <!-- Required Validation -->
+      <span *ngSwitchCase="'required'">{{ text }} is required.</span>
+
+      <!-- Email Validation -->
+      <span *ngSwitchCase="'email'">Please Enter Valid Email.</span>
+
+      <!-- Incomplete Date Validation -->
+      <span *ngSwitchCase="'incompleteDate'">Please Enter Valid Date.</span>
+
+      <!-- Disabled Date Validation -->
+      <span *ngSwitchCase="'disabledDate'">Please Enter Valid Date. You have entered Disabled Date.</span>
+
+      <!-- Maxlength Validation -->
+      <span *ngSwitchCase="'maxlength'">
+        {{ text }} should not exceed maxlength of {{ control.errors[error].requiredLength }}. <br />
+        Current length is {{ control.errors[error].actualLength }}
+      </span>
+
+      <!-- Min Error Validation -->
+      <span *ngSwitchCase="'minError'">
+        {{ text }} must be greater than {{ control.errors[error]['minValue'] }}. <br />
+        Current value is {{ control.errors[error]['value'] }}
+      </span>
+
+      <!-- Max Error Validation -->
+      <span *ngSwitchCase="'maxError'">
+        {{ text }} must be less than {{ control.errors[error]['maxValue'] }}. <br />
+        Current value is {{ control.errors[error]['value'] }}
+      </span>
+
+      <!-- Pattern Validation -->
+      <span *ngSwitchCase="'pattern'">
+        {{ control.errors[error]['actualValue'] }} does not match with pattern {{ control.errors['pattern']['requiredPattern'] }}
+      </span>
+
+      <!-- Pattern Validation -->
+      <span *ngSwitchCase="'pattern'">
+        {{ control.errors[error]['actualValue'] }} does not match with pattern {{ control.errors['pattern']['requiredPattern'] }}
+      </span>
+
+      <!-- Date Less then day Validation -->
+      <span *ngSwitchCase="'lessThanDay'">
+        {{ control.errors[error]['lessThanDay'] }} Selected Date must be Less then {{ control.errors['lessThanDay']['day'] }}
+      </span>
+
+      <!-- Date Grater then day Validation -->
+      <span *ngSwitchCase="'graterThanDay'">
+        {{ control.errors[error]['graterThanDay'] }} Selected Date must be Grater then {{ control.errors['graterThanDay']['day'] }}
+      </span>
+
+      <!-- Unique value directive Validation -->
+      <span *ngSwitchCase="'isUnique'">{{ text }} already exist.</span>
+
+      <ng-container *ngSwitchDefault>
+        <pre>{{ error }}:{{ control.errors[error] | json }}</pre>
+      </ng-container>
+    </ng-container>
+
+    <span *ngIf="Object.keys(message).includes(error)"> {{ message[error] }}</span>
+  </ng-container>
+
+  <ng-content></ng-content>
+</small>
