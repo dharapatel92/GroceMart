@@ -1,4 +1,4 @@
-package com.groceMart;
+package com.grocemart;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,7 +8,6 @@ public class GroceMartApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(GroceMartApplication.class, args);
-		System.out.println("Start....!!");
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.groceMart;
+package com.grocemart;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
