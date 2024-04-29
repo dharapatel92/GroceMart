@@ -1,0 +1,96 @@
+<ng-container [ngSwitch]="type">
+  <!-- DATE -->
+  <ng-container *ngSwitchCase="'DATE'">{{ (data | date: config?.showDateFormat || 'dd/MM/yyyy') ?? default ?? '' }}</ng-container>
+
+  <!-- TIME -->
+  <ng-container *ngSwitchCase="'TIME'">{{ (data | date: config?.showDateFormat || 'HH:mm:ss') ?? default ?? '' }}</ng-container>
+
+  <!-- DATE_TIME -->
+  <ng-container *ngSwitchCase="'DATE_TIME'">
+    {{ (data | date: config?.showDateFormat || 'dd/MM/yyyy HH:mm:ss') ?? default ?? '' }}
+  </ng-container>
+
+  <!-- NUMBER -->
+  <ng-container *ngSwitchCase="'NUMBER'">{{ ds.fixDecimal(+data, decimal) || default || (+'0').toFixed(decimal) }}</ng-container>
+
+  <!-- ACCOUNTING -->
+  <ng-container *ngSwitchCase="'ACCOUNTING'">
+    <!-- {{ ds | fn: getAccountingFormat:data:decimal }} -->
+  </ng-container>
+
+  <!-- BADGE -->
+  <ng-container *ngSwitchCase="'BADGE'">
+    <div [ngSwitch]="data">
+      <ng-container *ngFor="let badge of config?.badge">
+        <div *ngSwitchCase="badge.value">
+          <p-tag styleClass="badge text-{{ badge.size || 12 }} bg-{{ badge.type }}">{{ badge.text }}</p-tag>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!!data">
+        <div *ngSwitchDefault>
+          <p-tag styleClass="badge text-12 bg-gray-600">{{ data }}</p-tag>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <!-- LINK -->
+  <ng-container *ngSwitchCase="'LINK'">
+    <ng-container *ngIf="!!data && !!config?.routerLink(data, dataItem)?.link">
+      <a
+        class="text-primary-2"
+        [href]="[config?.routerLink(data, dataItem)?.link] || default || ''"
+        [target]="config?.routerLink(data, dataItem)?.target || '_self'"
+        [class.k-disabled]="config?.routerLink(data, dataItem)?.disabled || false">
+        {{ data }}
+      </a>
+    </ng-container>
+    <ng-container *ngIf="!!data && !config?.routerLink(data, dataItem)?.link">{{ data }}</ng-container>
+  </ng-container>
+
+  <!-- MULTI_LINK_STRING -->
+  <ng-container *ngSwitchCase="'MULTI_LINK'">
+    <ng-container *ngIf="!!data">
+      <ng-container *ngFor="let item of data; let first = first">
+        <ng-container *ngIf="!!item && !!config?.routerLink(item, dataItem)?.link">
+          <span *ngIf="first !== true"> | </span>
+          <a
+            class="{{ config?.routerLink(item, dataItem)?.class || 'text-primary-2' }}"
+            [href]="[config?.routerLink(item, dataItem)?.link] || default || ''"
+            [target]="config?.routerLink(item, dataItem)?.target || '_self'"
+            [class.k-disabled]="config?.routerLink(item, dataItem)?.disabled || false"
+            [text]="item?.trim()">
+          </a>
+        </ng-container>
+        <ng-container *ngIf="!!item && !config?.routerLink(item, dataItem)?.link">{{ item }}</ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+  <!-- MULTI_LINK_STRING -->
+  <ng-container *ngSwitchCase="'MULTI_LINK_STRING'">
+    <ng-container *ngIf="!!data">
+      <ng-container *ngFor="let item of data?.split(config?.linkSeparator || ','); let first = first">
+        <ng-container *ngIf="!!item && !!config?.routerLink(item, dataItem)?.link">
+          <span *ngIf="first !== true"> | </span>
+          <a
+            class="{{ config?.routerLink(item, dataItem)?.class || 'text-primary-2' }}"
+            [href]="[config?.routerLink(item, dataItem)?.link] || default || ''"
+            [target]="config?.routerLink(item, dataItem)?.target || '_self'"
+            [class.k-disabled]="config?.routerLink(item, dataItem)?.disabled || false"
+            [text]="item?.trim()">
+          </a>
+        </ng-container>
+        <ng-container *ngIf="!!item && !config?.routerLink(item, dataItem)?.link">{{ item }}</ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+  <!-- CUSTOM -->
+  <ng-container *ngSwitchCase="'CUSTOM'">
+    <ng-content></ng-content>
+  </ng-container>
+
+  <!-- Default -->
+  <ng-container *ngSwitchDefault>{{ data ?? default ?? '' }}</ng-container>
+</ng-container>
