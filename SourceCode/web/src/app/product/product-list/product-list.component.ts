@@ -1,0 +1,82 @@
+import { Component } from "@angular/core";
+import { Product } from "../../core/interfaces/product.interface";
+import { ProductService } from "../../core/services/product.service";
+import { SharedModule } from "../../shared/shared.module";
+import { AuthService } from "../../auth/services/auth.service";
+import { LoaderService } from "../../core/services/loader.service";
+import { CartService } from "../../core/services/cart.service";
+
+@Component({
+  selector: "app-product-list",
+  standalone: true,
+  imports: [SharedModule],
+  templateUrl: "./product-list.component.html",
+  styleUrl: "./product-list.component.scss",
+})
+export class ProductListComponent {
+  products: Product[] = [];
+
+  categoryList: any[] = [];
+  categoryId: number = 1;
+
+  constructor(
+    private productService: ProductService,
+    public authService: AuthService,
+    private loaderService: LoaderService,
+    private cartService: CartService
+  ) {}
+
+  ngOnInit() {
+    this.productService.getCategoryList().subscribe({
+      next: (success: any) => {
+        console.log(success);
+        this.categoryList = success.data;
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+
+    this.getProductList();
+  }
+
+  getProductList() {
+    this.loaderService.show();
+    this.productService.getProductListByCategory(this.categoryId).subscribe({
+      next: (success: any) => {
+        this.loaderService.hide();
+        console.log(success);
+        this.products = success.data;
+      },
+      error: (err) => {
+        this.loaderService.hide();
+        console.log(err);
+      },
+    });
+  }
+
+  addToCart(productId: number | undefined) {
+    if (productId)
+      this.cartService.addToCart(productId).subscribe((res: any) => {
+        if (res) {
+          this.cartService.cartItemsCount$.next(res.data.totalqty);
+          this.cartService.setOrderId(res.data?.orderId);
+        }
+      });
+  }
+
+  // for Admin/Vendor
+  deleteProduct(productId: any) {
+    this.loaderService.show();
+    this.productService.deleteProduct(productId).subscribe({
+      next: (res: any) => {
+        this.loaderService.hide();
+        this.getProductList();
+      },
+      error: (err) => {
+        this.loaderService.hide();
+        console.log(err);
+      },
+    });
+  }
+}

@@ -1,29 +1,79 @@
 <div class="surface-0">
-    <div class="flex align-items-center justify-content-between flex-column h-screen">
-        <div class="flex flex-column align-items-center justify-content-center w-full md:w-4 h-full text-center py-6 px-4">
-            <a [routerLink]="['/']" class="mb-3 text-xl">
-                Groce Mart
+  <div
+    class="flex align-items-center justify-content-between flex-column h-screen"
+  >
+    <div
+      class="flex flex-column align-items-center justify-content-center w-full md:w-4 h-full text-center py-6 px-4"
+    >
+      <a [routerLink]="['/']" class="mb-3 text-xl"> Groce Mart </a>
+
+      <p-selectButton [options]="loginRolesOptions" [(ngModel)]="activeRole" />
+
+      <h1 class="my-3">Sign In</h1>
+
+      <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+        <div class="flex flex-column">
+          <span class="p-input-icon-left w-full mb-4">
+            <i class="pi pi-envelope"></i>
+            <input
+              id="email"
+              type="text"
+              formControlName="email"
+              pInputText
+              class="w-full md:w-25rem text-color-secondary surface-50"
+              placeholder="Email"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  signInForm.get('email')?.invalid &&
+                  (signInForm.get('email')?.dirty ||
+                    signInForm.get('email')?.touched)
+              }"
+            />
+          </span>
+          <span class="p-input-icon-left w-full mb-4">
+            <i class="pi pi-lock"></i>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              pInputText
+              class="w-full md:w-25rem text-color-secondary surface-50"
+              placeholder="Password"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  signInForm.get('password')?.invalid &&
+                  (signInForm.get('password')?.dirty ||
+                    signInForm.get('password')?.touched)
+              }"
+            />
+          </span>
+
+          <button
+            pButton
+            pRipple
+            label="Sign in"
+            class="w-full mb-4"
+            type="submit"
+          ></button>
+          <a
+            routerLink="/auth/forgot-password"
+            class="font-medium text-sm text-300"
+            >forget password?</a
+          >
+          <p class="font-medium text-400 m-0 mt-6">
+            Don't you have an account,
+            <a routerLink="/auth/register" class="text-primary cursor-pointer">
+              sign up
             </a>
-            <h1 class="my-3">Sign In</h1>
-            <div class="flex flex-column">
-                <span class="p-input-icon-left w-full mb-4">
-                    <i class="pi pi-envelope"></i>
-                    <input id="email" type="text" pInputText class="w-full md:w-25rem text-color-secondary surface-50 border-200" placeholder="Email" />
-                </span>
-                <span class="p-input-icon-left w-full mb-4">
-                    <i class="pi pi-lock"></i>
-                    <input id="password" type="password" pInputText class="w-full md:w-25rem text-color-secondary surface-50 border-200" placeholder="Password" />
-                </span>
-
-                <button pButton pRipple label="Sign in" class="w-full mb-4" routerLink="/dashboard"></button>
-                <a routerLink="/auth/forgot-password" class="font-medium text-sm text-300">forget password?</a>
-                <p class="font-medium text-400 m-0 mt-6">Don’t you have an account, <a href="#" class="text-primary cursor-pointer">sign up</a></p>
-            </div>
+          </p>
         </div>
-        <div class="flex flex-wrap align-items-center pb-8 px-4">
-            <h4 class="m-0 mr-5" style="line-height: 22px">Groce Mart</h4>
-            <h6 class="m-0 font-medium text-300" style="line-height: 17px">Copyright Ⓒ Groce Mart</h6>
-        </div>
+      </form>
     </div>
+    <div class="flex flex-wrap align-items-center pb-8 px-4">
+      <h4 class="m-0 mr-5" style="line-height: 22px">Groce Mart</h4>
+      <h6 class="m-0 font-medium text-300" style="line-height: 17px">
+        Copyright Ⓒ Groce Mart
+      </h6>
+    </div>
+  </div>
 </div>
-

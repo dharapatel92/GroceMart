@@ -1,0 +1,172 @@
+<div class="card">
+  <span class="block text-900 font-bold text-xl mb-4">Create Product</span>
+  <form
+    #form="ngForm"
+    (ngSubmit)="onSubmit(form)"
+    class="grid grid-nogutter flex-wrap gap-3 p-fluid"
+  >
+    <div class="col-12 lg:col-8">
+      <div class="grid formgrid">
+        <div class="col-12 field">
+          <input
+            pInputText
+            type="text"
+            placeholder="Product Name"
+            label="Product Name"
+            name="productName"
+            [(ngModel)]="product.productName"
+          />
+        </div>
+        <div class="col-12 field">
+          <textarea
+            variant="filled"
+            rows="5"
+            cols="30"
+            pInputTextarea
+            name="productDescription"
+            placeholder="Product Description"
+            label="Product Description"
+            [(ngModel)]="product.description"
+          ></textarea>
+        </div>
+        <div class="col-12 lg:col-4 field">
+          <input
+            pInputText
+            type="text"
+            placeholder="Price"
+            label="Price"
+            name="price"
+            [(ngModel)]="product.price"
+          />
+        </div>
+        <div class="col-12 lg:col-4 field">
+          <input
+            pInputText
+            type="text"
+            placeholder="Sale Price"
+            label="Sale Price"
+            name="salePrice"
+            [(ngModel)]="product.salePrice"
+          />
+        </div>
+        <div class="col-12 lg:col-4 field">
+          <input
+            pInputText
+            type="text"
+            placeholder="Quantity"
+            label="Quantity"
+            name="quantity"
+            [(ngModel)]="product.qty"
+          />
+        </div>
+        <div class="col-12 lg:col-4 field">
+          <input
+            pInputText
+            type="text"
+            placeholder="Product Code"
+            label="Product Code"
+            name="productCode"
+            [(ngModel)]="product.productCode"
+          />
+        </div>
+
+        <div class="col-12 field">
+          <!-- <label for="UploadimgControlInput" class="form-label"
+            >Upload File/Image</label
+          >
+          <input
+            type="file"
+            class="form-control"
+            name="image"
+            (change)="onUpload($event)"
+            placeholder="Upload Image"
+          /> -->
+          <p-fileUpload
+            name="image"
+            accept="image/*"
+            #fileUploader
+            [auto]="true"
+            [url]="product.image"
+            [multiple]="false"
+            [customUpload]="true"
+            [showUploadButton]="false"
+            [showCancelButton]="false"
+            (onSelect)="onUpload($event)"
+            styleClass="border-1 surface-border surface-card border-round"
+          ></p-fileUpload>
+          <!-- <img [src]="product.image" class="w-4rem h-4rem" /> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-1 w-full lg:w-3 xl:w-4 flex flex-column row-gap-3">
+      <div class="border-1 surface-border border-round">
+        <span
+          class="text-900 font-bold block border-bottom-1 surface-border p-3"
+        >
+          Category
+        </span>
+        <div class="p-3">
+          <p-dropdown
+            name="categoryId"
+            appendTo="body"
+            optionValue="id"
+            optionLabel="categoryName"
+            [options]="categoryOptions"
+            [(ngModel)]="product.categoryId"
+            placeholder="Select a category"
+          ></p-dropdown>
+        </div>
+      </div>
+
+      <div
+        class="border-1 surface-border flex justify-content-between align-items-center py-2 px-3 border-round"
+      >
+        <span class="text-900 font-bold p-3">In stock</span>
+        <p-inputSwitch
+          name="isStock"
+          [(ngModel)]="product.isStock"
+        ></p-inputSwitch>
+      </div>
+
+      <div
+        class="border-1 surface-border flex justify-content-between align-items-center py-2 px-3 border-round"
+      >
+        <span class="text-900 font-bold p-3">Active</span>
+        <p-inputSwitch
+          name="isActive"
+          [(ngModel)]="product.isActive"
+        ></p-inputSwitch>
+      </div>
+
+      <div
+        class="border-1 surface-border flex justify-content-between align-items-center py-2 px-3 border-round"
+      >
+        <span class="text-900 font-bold p-3">Delete</span>
+        <p-inputSwitch
+          name="isDelete"
+          [(ngModel)]="product.isDelete"
+        ></p-inputSwitch>
+      </div>
+
+      <div
+        class="flex flex-column sm:flex-row justify-content-between align-items-center gap-3 py-2"
+      >
+        <button
+          pButton
+          pRipple
+          class="p-button-danger flex-1 p-button-outlined"
+          label="Discard"
+          icon="pi pi-fw pi-trash"
+        ></button>
+        <button
+          pButton
+          pRipple
+          class="p-button-primary flex-1 border-round"
+          label="Save"
+          icon="pi pi-fw pi-check"
+        ></button>
+      </div>
+    </div>
+  </form>
+</div>

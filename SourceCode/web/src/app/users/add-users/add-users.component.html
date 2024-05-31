@@ -1,0 +1,123 @@
+<form
+  class="width-full md:width-50 card"
+  [formGroup]="registerForm"
+  (ngSubmit)="onSubmit()"
+>
+  <div class="flex flex-column">
+    <span class="p-input-icon-left w-full mb-4">
+      <i class="pi pi-envelope"></i>
+      <input
+        id="email"
+        type="text"
+        formControlName="email"
+        pInputText
+        class="w-full md:w-25rem text-color-secondary surface-50"
+        placeholder="Email"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            registerForm.get('email')?.invalid &&
+            (registerForm.get('email')?.dirty ||
+              registerForm.get('email')?.touched)
+        }"
+      />
+    </span>
+    <span class="p-input-icon-left w-full mb-4">
+      <i class="pi pi-lock"></i>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        pInputText
+        class="w-full md:w-25rem text-color-secondary surface-50"
+        placeholder="Password"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            registerForm.get('password')?.invalid &&
+            (registerForm.get('password')?.dirty ||
+              registerForm.get('password')?.touched)
+        }"
+      />
+    </span>
+    <span class="p-input-icon-left w-full mb-4">
+      <i class="pi pi-user"></i>
+      <input
+        id="firstName"
+        type="text"
+        formControlName="firstName"
+        pInputText
+        class="w-full md:w-25rem text-color-secondary surface-50"
+        placeholder="First Name"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            registerForm.get('firstName')?.invalid &&
+            (registerForm.get('firstName')?.dirty ||
+              registerForm.get('firstName')?.touched)
+        }"
+      /> </span
+    ><span class="p-input-icon-left w-full mb-4">
+      <i class="pi pi-user"></i>
+      <input
+        id="lastName"
+        type="text"
+        formControlName="lastName"
+        pInputText
+        class="w-full md:w-25rem text-color-secondary surface-50"
+        placeholder="Last Name"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            registerForm.get('lastName')?.invalid &&
+            (registerForm.get('lastName')?.dirty ||
+              registerForm.get('lastName')?.touched)
+        }"
+      />
+    </span>
+    <span class="p-input-icon-left w-full mb-4">
+      <i class="pi pi-phone"></i>
+      <input
+        id="contact"
+        type="text"
+        formControlName="contact"
+        pInputText
+        class="w-full md:w-25rem text-color-secondary surface-50"
+        placeholder="Contact"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            registerForm.get('contact')?.invalid &&
+            (registerForm.get('contact')?.dirty ||
+              registerForm.get('contact')?.touched)
+        }"
+      />
+    </span>
+
+    <div class="flex flex-wrap gap-3 mb-4">
+      <div class="flex align-items-center">
+        <p-radioButton
+          name="roles"
+          value="CUSTOMER"
+          formControlName="roles"
+          inputId="CUSTOMER_INPUT"
+        />
+        <label for="CUSTOMER_INPUT" class="ml-2"> Customer </label>
+      </div>
+
+      <div class="flex align-items-center">
+        <p-radioButton
+          name="roles"
+          value="VENDOR"
+          formControlName="roles"
+          inputId="VENDOR_INPUT"
+        />
+        <label for="VENDOR_INPUT" class="ml-2"> Vendor </label>
+      </div>
+      <div class="flex w-full"></div>
+
+      <button
+        pButton
+        pRipple
+        label="Sign Up"
+        class="mb-4"
+        type="submit"
+      ></button>
+    </div>
+  </div>
+</form>

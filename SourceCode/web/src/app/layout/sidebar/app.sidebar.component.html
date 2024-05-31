@@ -1,0 +1,18 @@
+<div
+  class="layout-sidebar"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+>
+  <div class="sidebar-header">
+    <a [routerLink]="['/']" class="app-logo cursor-pointer"> Groce Mart </a>
+    <button
+      class="layout-sidebar-anchor p-link"
+      type="button"
+      (click)="anchor()"
+    ></button>
+  </div>
+
+  <div #menuContainer class="layout-menu-container">
+    <app-menu></app-menu>
+  </div>
+</div>

@@ -88,6 +88,9 @@ import { TooltipModule } from 'primeng/tooltip';
 // import { TreeTableModule } from 'primeng/treetable';
 import { TriStateCheckboxModule } from 'primeng/tristatecheckbox';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+
 
 const imports: any[] = [
   // AccordionModule,
@@ -131,6 +134,8 @@ const imports: any[] = [
   InputSwitchModule,
   InputTextModule,
   InputTextareaModule,
+  InputGroupModule,
+  InputGroupAddonModule,
   KeyFilterModule,
   KnobModule,
   ListboxModule,
