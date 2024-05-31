@@ -3,7 +3,11 @@ package com.groceMart.dto;
 import com.groceMart.dto.common.Role;
 import com.groceMart.entity.User;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserDTO {
     private Long id;
@@ -118,5 +122,14 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public static List<UserDTO> build(List<User> users) {
+        if (users.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            return users.stream().filter(Objects::nonNull)
+                    .map(UserDTO::build).collect(Collectors.toList());
+        }
     }
 }

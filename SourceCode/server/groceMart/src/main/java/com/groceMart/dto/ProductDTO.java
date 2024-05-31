@@ -24,6 +24,8 @@ public class ProductDTO {
     private Boolean isStock;
     private String description;
     private Boolean isDelete;
+    private Float disPercentage;
+    private Double originalPrice;
 
     public static ProductDTO build(Product product) {
         ProductDTO productDTO = new ProductDTO();
@@ -44,6 +46,9 @@ public class ProductDTO {
         productDTO.setIsStock(product.getIsStock());
         productDTO.setDescription(product.getDescription());
         productDTO.setIsDelete(product.getIsDelete());
+        
+        productDTO.setDisPercentage(product.getDisPercentage());
+        productDTO.setOriginalPrice(product.getOriginalPrice());
 
         return productDTO;
     }
@@ -144,14 +149,32 @@ public class ProductDTO {
     public void setIsDelete(Boolean isDelete) {
         this.isDelete = isDelete;
     }
+    
+    
 
-    @Override
-    public String toString() {
-        return "ProductDTO [id=" + id + ", productName=" + productName + ", productCode=" + productCode + ", price="
-                + price + ", salePrice=" + salePrice + ", image=" + image + ", isActive=" + isActive + ", categoryId="
-                + categoryId + ", qty=" + qty + ", isStock=" + isStock + ", description=" + description + ", isDelete="
-                + isDelete + "]";
-    }
+    public Float getDisPercentage() {
+		return disPercentage;
+	}
+
+	public void setDisPercentage(Float disPercentage) {
+		this.disPercentage = disPercentage;
+	}
+
+	public Double getOriginalPrice() {
+		return originalPrice;
+	}
+
+	public void setOriginalPrice(Double originalPrice) {
+		this.originalPrice = originalPrice;
+	}
+
+	@Override
+	public String toString() {
+		return "ProductDTO [id=" + id + ", productName=" + productName + ", productCode=" + productCode + ", price="
+				+ price + ", salePrice=" + salePrice + ", image=" + image + ", isActive=" + isActive + ", categoryId="
+				+ categoryId + ", qty=" + qty + ", isStock=" + isStock + ", description=" + description + ", isDelete="
+				+ isDelete + ", disPercentage=" + disPercentage + ", originalPrice=" + originalPrice + "]";
+	}
 
 
 }

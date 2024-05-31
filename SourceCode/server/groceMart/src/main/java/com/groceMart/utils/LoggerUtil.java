@@ -1,8 +1,7 @@
 package com.groceMart.utils;
-
-import com.groceMart.GroceMartApplication;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.groceMart.GroceMartApplication;
 
 
 public class LoggerUtil {

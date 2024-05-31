@@ -24,7 +24,7 @@ public class AdminCrontroller {
             responseDTO = userService.activeVendor(userId);
         } catch (Exception e) {
             responseDTO.setSuccess(Constants.ERROR_CODE);
-            responseDTO.setMessage("Error occured while login");
+            responseDTO.setMessage("Error occurred while login");
             LoggerUtil.logError(e.getMessage());
         }
         return responseDTO;

@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.regex.Pattern;
@@ -54,6 +55,12 @@ public class UserService {
             responseDTO.setMessage("Email is already registered.");
             return responseDTO;
         }
+        if (request.getRoles().contains(Role.ADMIN)) {
+            responseDTO.setSuccess(Constants.ERROR_CODE);
+            responseDTO.setMessage("Admin can not be registered.");
+            return responseDTO;
+        }
+        
         String hashedPassword = CommonUtil.encodePassword(request.getPassword());
         User user = new User();
         user.setEmail(request.getEmail());
@@ -151,6 +158,22 @@ public class UserService {
             responseDTO.setMessage("User not found with email: " + request.getEmail());
             return responseDTO;
         }
+        if(!user.get().getRoles().stream().anyMatch(a-> a.name().equalsIgnoreCase(request.getRole()))) {
+        
+        	responseDTO.setSuccess(Constants.ERROR_CODE);
+            responseDTO.setMessage("User is not found");
+            return responseDTO;
+        }
+        
+        if(user.get().getRoles().contains(Role.VENDOR)) {
+        	
+        	if(!user.get().isActive()) {
+        		 responseDTO.setSuccess(Constants.ERROR_CODE);
+                 responseDTO.setMessage("User is not Active. Please contact to Admin.");
+                 return responseDTO;
+        	}
+        }
+        
         String currentPassword = CommonUtil.decodePassword(user.get().getPassword());
         if (currentPassword.equals(request.getPassword())) {
             responseDTO.setSuccess(Constants.SUCESS_CODE);
@@ -265,9 +288,7 @@ public class UserService {
         	if(optionalUser.get().getForgotCode().equals(code)) {
         		
         		Calendar currentDate = Calendar.getInstance();
-        		System.out.println(CommonUtil.converterDateToString(currentDate));
-            	Calendar date = CommonUtil.converterStringToDate(optionalUser.get().getExpiry());
-            	System.out.println(CommonUtil.converterDateToString(date));
+        		Calendar date = CommonUtil.converterStringToDate(optionalUser.get().getExpiry());
             	if(currentDate.after(date)) {
             	
             		responseDTO.setSuccess(Constants.ERROR_CODE);
@@ -298,4 +319,37 @@ public class UserService {
              return responseDTO;
         }
 	}
+	
+	public ResponseDTO getUserDetails(Long userId) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        if (userId == null) {
+            responseDTO.setSuccess(Constants.ERROR_CODE);
+            responseDTO.setMessage("UserId is null in request.");
+            return responseDTO;
+        }
+
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            responseDTO.setData(UserDTO.build(user));
+            responseDTO.setSuccess(Constants.ERROR_CODE);
+            responseDTO.setMessage("UserDetails fetched successFully.");
+        } else {
+            responseDTO.setSuccess(Constants.ERROR_CODE);
+            responseDTO.setMessage("User Not found with Id: " + userId);
+        }
+        return responseDTO;
+    }
+
+    public ResponseDTO getAllUsers() {
+        ResponseDTO responseDTO = new ResponseDTO();
+
+        List<User> users = userRepository.findAll();
+
+        responseDTO.setData(UserDTO.build(users));
+        responseDTO.setSuccess(Constants.ERROR_CODE);
+        responseDTO.setMessage("UserDetails fetched successFully.");
+        return responseDTO;
+    }
 }

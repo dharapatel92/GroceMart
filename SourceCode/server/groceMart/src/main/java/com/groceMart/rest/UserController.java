@@ -29,7 +29,7 @@ public class UserController {
 
         } catch (Exception e) {
             responseDTO.setSuccess(Constants.ERROR_CODE);
-            responseDTO.setMessage("Error occured while login");
+            responseDTO.setMessage("Error occurred while login");
             LoggerUtil.logError(e.getMessage());
         }
         return responseDTO;
@@ -97,8 +97,8 @@ public class UserController {
         }
         return responseDTO;
     }
-    
-    
+
+
     @GetMapping("/users/forgotPassword")
     public ResponseDTO forgotPassword(@RequestParam String email) {
         LoggerUtil.logInfo("Entered into forgotPassword");
@@ -113,7 +113,7 @@ public class UserController {
         }
         return responseDTO;
     }
-    
+
     @PostMapping("/users/resetPassword")
     public ResponseDTO resetPassword(@RequestParam String email, @RequestParam String code, @RequestParam String password) {
         LoggerUtil.logInfo("Entered into resetPassword");
@@ -124,6 +124,36 @@ public class UserController {
             // Handling error case
             responseDTO.setSuccess(Constants.ERROR_CODE);
             responseDTO.setMessage("Error occurred while reset Password");
+            LoggerUtil.logError(e.getMessage());
+        }
+        return responseDTO;
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseDTO getUserDetails(@PathVariable Long userId) {
+        LoggerUtil.logInfo("Entered into getUserDetails");
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            responseDTO = userService.getUserDetails(userId);
+        } catch (Exception e) {
+            // Handling error case
+            responseDTO.setSuccess(Constants.ERROR_CODE);
+            responseDTO.setMessage("Error occurred while getUserDetails");
+            LoggerUtil.logError(e.getMessage());
+        }
+        return responseDTO;
+    }
+
+    @GetMapping("/users")
+    public ResponseDTO getAllUsers() {
+        LoggerUtil.logInfo("Entered into getAllUsers");
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            responseDTO = userService.getAllUsers();
+        } catch (Exception e) {
+            // Handling error case
+            responseDTO.setSuccess(Constants.ERROR_CODE);
+            responseDTO.setMessage("Error occurred while getAllUsers");
             LoggerUtil.logError(e.getMessage());
         }
         return responseDTO;
