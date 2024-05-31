@@ -2,6 +2,7 @@ package com.groceMart.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.groceMart.dto.ProductDTO;
+import com.groceMart.dto.PromotionRequest;
 import com.groceMart.dto.common.ResponseDTO;
 import com.groceMart.dto.common.Role;
 import com.groceMart.entity.Category;
@@ -10,6 +11,7 @@ import com.groceMart.entity.User;
 import com.groceMart.repository.CategoryRepository;
 import com.groceMart.repository.ProductRepository;
 import com.groceMart.repository.UserRepository;
+import com.groceMart.utils.CommonUtil;
 import com.groceMart.utils.Constants;
 import com.groceMart.utils.LoggerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,8 +137,12 @@ public class ProductService {
     public ResponseDTO getProductByCat(Long catId) {
         ResponseDTO responseDTO = new ResponseDTO();
         List<ProductDTO> productDTOs = new ArrayList<ProductDTO>();
-        List<Product> list = productRepository.findByCategoryIdAndIsDelete(catId, false);
-
+        List<Product> list = new ArrayList<Product>();
+        if(catId != null) {
+        	list = productRepository.findByCategoryIdAndIsDelete(catId, false);
+        }else {
+        	list = productRepository.findByIsDelete(false);
+        }
         for (Product product : list) {
             ProductDTO dto = new ProductDTO();
             dto.setCategoryId(product.getCategory().getId());
@@ -151,6 +157,8 @@ public class ProductService {
             dto.setQty(product.getQty());
             dto.setIsStock(product.getIsStock());
             dto.setIsDelete(product.getIsDelete());
+            dto.setOriginalPrice(product.getOriginalPrice());
+            dto.setDisPercentage(product.getDisPercentage());
             productDTOs.add(dto);
 
         }
@@ -181,6 +189,8 @@ public class ProductService {
             dto.setQty(optional.get().getQty());
             dto.setIsStock(optional.get().getIsStock());
             dto.setIsDelete(optional.get().getIsDelete());
+            dto.setOriginalPrice(optional.get().getOriginalPrice());
+            dto.setDisPercentage(optional.get().getDisPercentage());
 
             responseDTO.setData(dto);
             responseDTO.setMessage("Product get sucessfully");
@@ -329,6 +339,56 @@ public class ProductService {
 
         return responseDTO;
     }
+
+	public ResponseDTO promotion(PromotionRequest promotionRequest) {
+		ResponseDTO responseDTO = new ResponseDTO();
+		
+		if (promotionRequest.getDisPercentage() <= 0 || promotionRequest.getDisPercentage() > 100) {
+			
+            responseDTO.setSuccess(Constants.ERROR_CODE);
+            responseDTO.setMessage("Discount percentage must be between 0 and 100.");
+            return responseDTO;
+        }
+		
+        Optional<User> userOptional = userRepository.findById(promotionRequest.getUserId());
+        if (userOptional.isPresent()) {
+
+            if (!userOptional.get().getRoles().contains(Role.ADMIN)) {
+                responseDTO.setSuccess(Constants.ERROR_CODE);
+                responseDTO.setMessage("Access denied.!! Please try with valid user.");
+                return responseDTO;
+            }
+
+        } else {
+            responseDTO.setSuccess(Constants.ERROR_CODE);
+            responseDTO.setMessage("User is not Found");
+            return responseDTO;
+        }
+        
+        Optional<Product> productOptional = productRepository.findById(promotionRequest.getProductId());
+        if (productOptional.isPresent()) {
+           
+        	productOptional.get().setOriginalPrice(CommonUtil.roundToTwoDecimalPlaces(productOptional.get().getSalePrice()));
+        	productOptional.get().setDisPercentage(promotionRequest.getDisPercentage());
+        	
+        	double discountAmount = (promotionRequest.getDisPercentage() / 100) * productOptional.get().getOriginalPrice();
+        	
+        	productOptional.get().setSalePrice(CommonUtil.roundToTwoDecimalPlaces(productOptional.get().getOriginalPrice() - discountAmount));
+        	
+            productRepository.save(productOptional.get());
+
+            responseDTO.setSuccess(Constants.SUCESS_CODE);
+            responseDTO.setMessage("Promotion added Sucessfully");
+
+        } else {
+
+            responseDTO.setSuccess(Constants.ERROR_CODE);
+            responseDTO.setMessage("Product is not Found");
+            return responseDTO;
+        }
+
+        return responseDTO;
+	}
 
 }
 
