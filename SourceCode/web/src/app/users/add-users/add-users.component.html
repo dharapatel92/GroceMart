@@ -1,6 +1,6 @@
 <form
   class="width-full md:width-50 card"
-  [formGroup]="registerForm"
+  [formGroup]="userProfileForm"
   (ngSubmit)="onSubmit()"
 >
   <div class="flex flex-column">
@@ -15,9 +15,9 @@
         placeholder="Email"
         [ngClass]="{
           'ng-invalid ng-dirty':
-            registerForm.get('email')?.invalid &&
-            (registerForm.get('email')?.dirty ||
-              registerForm.get('email')?.touched)
+            userProfileForm.get('email')?.invalid &&
+            (userProfileForm.get('email')?.dirty ||
+              userProfileForm.get('email')?.touched)
         }"
       />
     </span>
@@ -32,9 +32,9 @@
         placeholder="Password"
         [ngClass]="{
           'ng-invalid ng-dirty':
-            registerForm.get('password')?.invalid &&
-            (registerForm.get('password')?.dirty ||
-              registerForm.get('password')?.touched)
+            userProfileForm.get('password')?.invalid &&
+            (userProfileForm.get('password')?.dirty ||
+              userProfileForm.get('password')?.touched)
         }"
       />
     </span>
@@ -49,9 +49,9 @@
         placeholder="First Name"
         [ngClass]="{
           'ng-invalid ng-dirty':
-            registerForm.get('firstName')?.invalid &&
-            (registerForm.get('firstName')?.dirty ||
-              registerForm.get('firstName')?.touched)
+            userProfileForm.get('firstName')?.invalid &&
+            (userProfileForm.get('firstName')?.dirty ||
+              userProfileForm.get('firstName')?.touched)
         }"
       /> </span
     ><span class="p-input-icon-left w-full mb-4">
@@ -65,9 +65,9 @@
         placeholder="Last Name"
         [ngClass]="{
           'ng-invalid ng-dirty':
-            registerForm.get('lastName')?.invalid &&
-            (registerForm.get('lastName')?.dirty ||
-              registerForm.get('lastName')?.touched)
+            userProfileForm.get('lastName')?.invalid &&
+            (userProfileForm.get('lastName')?.dirty ||
+              userProfileForm.get('lastName')?.touched)
         }"
       />
     </span>
@@ -82,12 +82,28 @@
         placeholder="Contact"
         [ngClass]="{
           'ng-invalid ng-dirty':
-            registerForm.get('contact')?.invalid &&
-            (registerForm.get('contact')?.dirty ||
-              registerForm.get('contact')?.touched)
+            userProfileForm.get('contact')?.invalid &&
+            (userProfileForm.get('contact')?.dirty ||
+              userProfileForm.get('contact')?.touched)
         }"
       />
     </span>
+
+    <div class="flex flex-wrap gap-3 mb-4">
+      <div
+        class="border-1 surface-border flex justify-content-between align-items-center py-2 px-3 border-round"
+      >
+        <span class="text-900 font-bold p-3">Active</span>
+        <p-inputSwitch name="active" formControlName="active"></p-inputSwitch>
+      </div>
+
+      <div
+        class="border-1 surface-border flex justify-content-between align-items-center py-2 px-3 border-round"
+      >
+        <span class="text-900 font-bold p-3">Delete</span>
+        <p-inputSwitch name="delete" formControlName="delete"></p-inputSwitch>
+      </div>
+    </div>
 
     <div class="flex flex-wrap gap-3 mb-4">
       <div class="flex align-items-center">
@@ -109,12 +125,22 @@
         />
         <label for="VENDOR_INPUT" class="ml-2"> Vendor </label>
       </div>
+
+      <div class="flex align-items-center">
+        <p-radioButton
+          name="roles"
+          value="ADMIN"
+          formControlName="roles"
+          inputId="ADMIN_INPUT"
+        />
+        <label for="ADMIN_INPUT" class="ml-2"> Admin </label>
+      </div>
       <div class="flex w-full"></div>
 
       <button
         pButton
         pRipple
-        label="Sign Up"
+        label="Update"
         class="mb-4"
         type="submit"
       ></button>

@@ -46,8 +46,8 @@ export class ContactUsComponent {
     return {
       "background-image":
         this.layoutService.config().colorScheme === "light"
-          ? "url('assets/demo/images/contact/map-light.svg')"
-          : "url('assets/demo/images/contact/map-dark.svg')",
+          ? "url('assets/images/contact/map-light.svg')"
+          : "url('assets/images/contact/map-dark.svg')",
     };
   }
 }

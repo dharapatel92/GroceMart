@@ -32,6 +32,7 @@ import { AppSidebarComponent } from "../sidebar/app.sidebar.component";
     <ng-container>
       <div
         *ngIf="root && item.visible !== false"
+        [routerLink]="item.routerLink"
         class="layout-menuitem-root-text"
       >
         {{ item.label }}

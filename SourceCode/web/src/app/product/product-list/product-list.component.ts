@@ -15,9 +15,8 @@ import { CartService } from "../../core/services/cart.service";
 })
 export class ProductListComponent {
   products: Product[] = [];
-
   categoryList: any[] = [];
-  categoryId: number = 1;
+  categoryId: number | undefined = 1;
 
   constructor(
     private productService: ProductService,
@@ -30,14 +29,17 @@ export class ProductListComponent {
     this.productService.getCategoryList().subscribe({
       next: (success: any) => {
         console.log(success);
-        this.categoryList = success.data;
+        this.categoryList = [
+          { id: undefined, categoryName: "ALL", active: true },
+          ...success.data,
+        ];
       },
       error: (err) => {
         console.log(err);
       },
     });
-
     this.getProductList();
+    this.getSearchedProducts();
   }
 
   getProductList() {
@@ -47,6 +49,21 @@ export class ProductListComponent {
         this.loaderService.hide();
         console.log(success);
         this.products = success.data;
+        this.productService.setProducts(this.products);
+      },
+      error: (err) => {
+        this.loaderService.hide();
+        console.log(err);
+      },
+    });
+  }
+
+  getSearchedProducts() {
+    this.loaderService.show();
+    this.productService.searchedProducts$.subscribe({
+      next: (products: any) => {
+        this.loaderService.hide();
+        this.products = products;
       },
       error: (err) => {
         this.loaderService.hide();
@@ -60,6 +77,7 @@ export class ProductListComponent {
       this.cartService.addToCart(productId).subscribe((res: any) => {
         if (res) {
           this.cartService.cartItemsCount$.next(res.data.totalqty);
+          this.cartService.showCart();
           this.cartService.setOrderId(res.data?.orderId);
         }
       });

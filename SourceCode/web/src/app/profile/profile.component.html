@@ -1,1 +1,161 @@
-<p>profile works!</p>
+<form class="grid card" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  <div class="col-12 sm:col-6 md:col-4">
+    <span class="p-input-icon-left w-full mb-4">
+      <i class="pi pi-envelope"></i>
+      <input
+        id="email"
+        type="text"
+        formControlName="email"
+        pInputText
+        class="w-full text-color-secondary surface-50"
+        placeholder="Email"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            profileForm.get('email')?.invalid &&
+            (profileForm.get('email')?.dirty ||
+              profileForm.get('email')?.touched)
+        }"
+      />
+    </span>
+  </div>
+  <div class="col-12 sm:col-6 md:col-4">
+    <span class="p-input-icon-left w-full mb-4">
+      <i class="pi pi-lock"></i>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        pInputText
+        class="w-full text-color-secondary surface-50"
+        placeholder="Password"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            profileForm.get('password')?.invalid &&
+            (profileForm.get('password')?.dirty ||
+              profileForm.get('password')?.touched)
+        }"
+      />
+    </span>
+  </div>
+  <div class="col-12 sm:col-6 md:col-4">
+    <span class="p-input-icon-left w-full mb-4">
+      <i class="pi pi-user"></i>
+      <input
+        id="firstName"
+        type="text"
+        formControlName="firstName"
+        pInputText
+        class="w-full text-color-secondary surface-50"
+        placeholder="First Name"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            profileForm.get('firstName')?.invalid &&
+            (profileForm.get('firstName')?.dirty ||
+              profileForm.get('firstName')?.touched)
+        }"
+      />
+    </span>
+    <span
+      *ngIf="
+        profileForm.get('firstName')?.invalid &&
+        (profileForm.get('firstName')?.dirty ||
+          profileForm.get('firstName')?.touched)
+      "
+      style="color: red"
+      >This field is required!</span
+    >
+  </div>
+  <div class="col-12 sm:col-6 md:col-4">
+    <span class="p-input-icon-left w-full mb-4">
+      <i class="pi pi-user"></i>
+      <input
+        id="lastName"
+        type="text"
+        formControlName="lastName"
+        pInputText
+        class="w-full text-color-secondary surface-50"
+        placeholder="Last Name"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            profileForm.get('lastName')?.invalid &&
+            (profileForm.get('lastName')?.dirty ||
+              profileForm.get('lastName')?.touched)
+        }"
+      />
+    </span>
+    <span
+      *ngIf="
+        profileForm.get('lastName')?.invalid &&
+        (profileForm.get('lastName')?.dirty ||
+          profileForm.get('lastName')?.touched)
+      "
+      style="color: red"
+      >This field is required!</span
+    >
+  </div>
+  <div class="col-12 sm:col-6 md:col-4">
+    <span class="p-input-icon-left w-full mb-4">
+      <i class="pi pi-phone"></i>
+      <input
+        id="contact"
+        type="text"
+        formControlName="contact"
+        pInputText
+        class="w-full text-color-secondary surface-50"
+        placeholder="Contact"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            profileForm.get('contact')?.invalid &&
+            (profileForm.get('contact')?.dirty ||
+              profileForm.get('contact')?.touched)
+        }"
+      />
+    </span>
+    <span
+      *ngIf="
+        profileForm.get('contact')?.invalid &&
+        (profileForm.get('contact')?.dirty ||
+          profileForm.get('contact')?.touched)
+      "
+      style="color: red"
+      >This field is required!</span
+    >
+  </div>
+  <!-- <div class="col-12 sm:col-6 md:col-4 mb-4 flex gap-3">
+    <div class="flex align-items-center">
+      <p-radioButton
+        name="roles"
+        value="CUSTOMER"
+        formControlName="roles"
+        inputId="CUSTOMER_INPUT"
+      />
+      <label for="CUSTOMER_INPUT" class="ml-2"> Customer </label>
+    </div>
+
+    <div class="flex align-items-center">
+      <p-radioButton
+        name="roles"
+        value="VENDOR"
+        formControlName="roles"
+        inputId="VENDOR_INPUT"
+      />
+      <label for="VENDOR_INPUT" class="ml-2"> Vendor </label>
+    </div>
+
+    <div
+      class="flex align-items-center"
+      *ngIf="profileForm.get('roles')?.value === 'ADMIN'"
+    >
+      <p-radioButton
+        name="roles"
+        value="ADMIN"
+        formControlName="roles"
+        inputId="VENDOR_INPUT"
+      />
+      <label for="VENDOR_INPUT" class="ml-2"> Admin </label>
+    </div>
+  </div> -->
+  <div class="col-12 py-0 text-center">
+    <button pButton pRipple label="Update" type="submit"></button>
+  </div>
+</form>

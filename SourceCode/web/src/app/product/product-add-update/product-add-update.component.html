@@ -1,5 +1,7 @@
 <div class="card">
-  <span class="block text-900 font-bold text-xl mb-4">Create Product</span>
+  <span class="block text-900 font-bold text-xl mb-4"
+    >{{ productId ? "Edit" : "Create" }} Product</span
+  >
   <form
     #form="ngForm"
     (ngSubmit)="onSubmit(form)"

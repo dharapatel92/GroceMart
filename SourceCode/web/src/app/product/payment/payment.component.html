@@ -1,0 +1,83 @@
+<div class="payment-container">
+  <form
+    class="payment-form"
+    [formGroup]="paymentForm"
+    (ngSubmit)="submitPayment()"
+  >
+    <div class="form-field">
+      <label for="cardholderName">Name of Card holder:</label>
+      <input
+        id="cardholderName"
+        type="text"
+        pInputText
+        placeholder="Enter card holder's name"
+        formControlName="cardHolderName"
+      />
+      <div
+        *ngIf="
+          cardHolderName.invalid &&
+          (cardHolderName.dirty || cardHolderName.touched)
+        "
+        class="error-message"
+      >
+        Name of card holder is required
+      </div>
+    </div>
+    <div class="form-field">
+      <label for="cardNumber">Card Number:</label>
+      <input
+        id="cardNumber"
+        type="number"
+        pInputText
+        placeholder="Enter card number"
+        formControlName="cardNumber"
+      />
+      <div
+        *ngIf="cardNumber.invalid && (cardNumber.dirty || cardNumber.touched)"
+        class="error-message"
+      >
+        Please enter a valid 16-digit card number
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label for="expiryDate">Expiry of card:</label>
+        <input
+          id="expiryDate"
+          type="text"
+          pInputText
+          placeholder="MM/YY"
+          formControlName="expiryDate"
+        />
+        <div
+          *ngIf="expiryDate.invalid && (expiryDate.dirty || expiryDate.touched)"
+          class="error-message"
+        >
+          Please enter a valid expiry date (MM/YY)
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="cvv">CVV:</label>
+        <input
+          id="cvv"
+          type="number"
+          pInputText
+          placeholder="Enter CVV"
+          formControlName="cvv"
+        />
+        <div
+          *ngIf="cvv.invalid && (cvv.dirty || cvv.touched)"
+          class="error-message"
+        >
+          Please enter a valid 3-digit CVV
+        </div>
+      </div>
+    </div>
+    <button
+      pButton
+      type="submit"
+      label="Confirm Payment"
+      class="submit-button"
+    ></button>
+  </form>
+</div>

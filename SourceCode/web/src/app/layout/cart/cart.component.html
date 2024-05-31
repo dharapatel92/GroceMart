@@ -1,98 +1,97 @@
-<!-- <h3>Cart</h3>
-<div class="flex flex-column justify-content-center align-items-center">
-  <div
-    class="mb-5 lg:mb-0"
-    *ngFor="let product of products?.orderDetailsDTOList"
-    [routerLink]="['/product/product-view/', product.product.id]"
-  >
-    <div class="mb-3 relative flex">
-      <img [src]="product.product.image" class="w-3rem h-3rem" />
-      <div class="flex flex-column align-items-center">
-        <span class="text-xl text-900 font-medium mb-3">{{
-          product?.product?.productName
-        }}</span>
-        <span class="text-xl text-900 mb-3"
-          >${{ product?.product?.price }}</span
+<div class="cart-container" [class.text-center]="!products">
+  <p-progressSpinner
+    *ngIf="isLoading; else showProducts"
+    styleClass="w-4rem h-4rem text-center"
+    strokeWidth="4"
+    animationDuration="1.8s"
+  ></p-progressSpinner>
+
+  <ng-template #showProducts>
+    <ng-container *ngIf="products?.totalqty; else emptyCart">
+      <div class="cart-items">
+        <ng-container
+          *ngFor="let product of products?.orderDetailsDTOList; let i = index"
         >
-        <p-inputNumber
-          [ngModel]="product?.quantity"
-          [showButtons]="true"
-          buttonLayout="horizontal"
-          spinnerMode="horizontal"
-          [min]="0"
-          inputStyleClass="w-3rem text-center"
-          decrementButtonClass="p-button-text"
-          incrementButtonClass="p-button-text"
-          incrementButtonIcon="pi pi-plus"
-          decrementButtonIcon="pi pi-minus"
-          (click)="$event.stopPropagation()"
-        ></p-inputNumber>
-      </div>
-    </div>
-  </div>
-
-  
-</div> -->
-
-<div class="cart-container">
-  <ng-container *ngIf="products?.totalqty; else emptyCart">
-    <div class="cart-items">
-      <ng-container *ngFor="let product of products?.orderDetailsDTOList">
-        <div *ngIf="product.quantity" class="cart-item">
-          <img
-            [src]="product.product.image"
-            alt="{{ product.product.productName }}"
-            class="product-image cursor-pointer"
-            [routerLink]="['/product/product-view/', product.product.id]"
-          />
-          <div class="product-details">
-            <div class="flex justify-content-between">
-              <div class="product-name">{{ product.product.productName }}</div>
-              <div class="product-price">${{ product.product.price }}</div>
+          <div *ngIf="product.quantity" class="cart-item">
+            <div class="flex justify-content-center align-items-center">
+              <img
+                [src]="product.product.image"
+                alt="{{ product.product.productName }}"
+                class="product-image cursor-pointer"
+                [routerLink]="['/product/product-view/', product.product.id]"
+                (click)="hideCart()"
+              />
             </div>
-            <div class="flex justify-content-between">
-              <p-inputNumber
-                [ngModel]="product?.quantity"
-                [showButtons]="true"
-                buttonLayout="horizontal"
-                spinnerMode="horizontal"
-                [min]="0"
-                inputStyleClass="w-3rem text-center"
-                decrementButtonClass="p-button-text"
-                incrementButtonClass="p-button-text"
-                incrementButtonIcon="pi pi-plus"
-                decrementButtonIcon="pi pi-minus"
-                (click)="$event.stopPropagation()"
-                (onInput)="setQty($event, product)"
-              ></p-inputNumber>
-              <i
-                class="pi pi-trash cursor-pointer"
-                (click)="removeItemFromCart(product.product.id)"
-                title="Remove"
-              ></i>
-            </div>
-            <div class="product-total">
-              Total: ${{ product.product.price * product.quantity }}
+            <div class="product-details">
+              <div class="flex justify-content-between">
+                <div class="product-name">
+                  {{ product.product.productName }}
+                </div>
+                <div class="product-price">
+                  ${{ product.product.salePrice }}
+                </div>
+              </div>
+              <div class="flex justify-content-between align-items-center">
+                <!-- <p-inputNumber
+                  [ngModel]="product?.quantity"
+                  [showButtons]="true"
+                  buttonLayout="horizontal"
+                  spinnerMode="horizontal"
+                  [min]="0"
+                  inputStyleClass="w-3rem text-center"
+                  decrementButtonClass="p-button-text"
+                  incrementButtonClass="p-button-text"
+                  incrementButtonIcon="pi pi-plus"
+                  decrementButtonIcon="pi pi-minus"
+                  (click)="$event.stopPropagation()"
+                  (onInput)="setQty($event, product)"
+                ></p-inputNumber> -->
+                <div class="button-container">
+                  <button class="p-button" (click)="decrement(product)">
+                    -
+                  </button>
+                  <span class="quantity-display">{{ product?.quantity }}</span>
+                  <button class="p-button" (click)="increment(product)">
+                    +
+                  </button>
+                </div>
+
+                <i
+                  class="pi pi-trash cursor-pointer"
+                  style="font-size: 1.2rem"
+                  (click)="removeItemFromCart(product.product.id)"
+                  title="Remove"
+                ></i>
+              </div>
+              <div class="product-total">
+                Total: ${{ product.product.salePrice * product.quantity }}
+              </div>
             </div>
           </div>
-        </div>
-      </ng-container>
-      <div class="cart-summary">Total: ${{ products?.amount || 0 }}</div>
-      <button pButton pRipple label="Checkout" (click)="onCheckout()"></button>
-    </div>
-  </ng-container>
+        </ng-container>
+        <div class="cart-summary">Total: ${{ products?.amount || 0 }}</div>
+        <button
+          pButton
+          pRipple
+          label="Proceed to Checkout"
+          [routerLink]="['checkout']"
+          (click)="hideCart()"
+        ></button>
+      </div>
+    </ng-container>
 
-  <ng-template #emptyCart>
-    <div
-      class="flex flex-column gap-2 justify-content-center align-items-center"
-    >
-      <img src="assets/images/cart/empty-cart.png" alt="" />
-      <button
-        pButton
-        pRipple
-        label="Continue Shopping"
-        (click)="router.navigate(['product'])"
-      ></button>
-    </div>
+    <ng-template #emptyCart>
+      <div
+        class="flex flex-column gap-2 justify-content-center align-items-center"
+      >
+        <img src="assets/images/cart/empty-cart.png" alt="Cart is Empty" />
+        <button
+          pButton
+          pRipple
+          label="Continue Shopping"
+          (click)="navigateToProductsList()"
+        ></button>
+      </div>
+    </ng-template>
   </ng-template>
 </div>

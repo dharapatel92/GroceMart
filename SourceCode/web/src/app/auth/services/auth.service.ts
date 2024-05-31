@@ -86,4 +86,13 @@ export class AuthService {
       paramsBody
     );
   }
+
+  getUserId() {
+    let userData;
+    try {
+      userData = JSON.parse(localStorage.getItem("user") || "");
+    } catch (error) {}
+
+    return +userData?.id;
+  }
 }

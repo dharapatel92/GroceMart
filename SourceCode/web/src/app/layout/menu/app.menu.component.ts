@@ -19,8 +19,17 @@ export class AppMenuComponent implements OnInit {
 
     this.model = [
       {
+        label: "Dashboard",
+        icon: "pi pi-fw pi-phone",
+        routerLink: ["/dashboard"],
+        visible:
+          this.authService.roleCheck("ADMIN") ||
+          this.authService.roleCheck("VENDOR"),
+      },
+      {
         label: "Product",
         icon: "pi pi-fw pi-wallet",
+        routerLink: ["/product"],
         items: [
           {
             label: "Product List",
@@ -41,20 +50,28 @@ export class AppMenuComponent implements OnInit {
               this.authService.roleCheck("VENDOR"),
           },
           {
-            label: "Checkout Form",
-            icon: "pi pi-fw pi-check-square",
-            routerLink: ["/product/checkout"],
+            label: "Manage Promotion",
+            icon: "pi pi-fw pi-plus",
+            routerLink: ["/product/promotion-view"],
+            visible:
+              this.authService.roleCheck("ADMIN") ||
+              this.authService.roleCheck("VENDOR"),
           },
-          {
-            label: "Order History",
-            icon: "pi pi-fw pi-history",
-            routerLink: ["/product/order-history"],
-          },
-          {
-            label: "Order Summary",
-            icon: "pi pi-fw pi-file",
-            routerLink: ["/product/order-summary"],
-          },
+          // {
+          //   label: "Checkout Form",
+          //   icon: "pi pi-fw pi-check-square",
+          //   routerLink: ["/product/checkout"],
+          // },
+          // {
+          //   label: "Order History",
+          //   icon: "pi pi-fw pi-history",
+          //   routerLink: ["/product/order-history"],
+          // },
+          // {
+          //   label: "Order Summary",
+          //   icon: "pi pi-fw pi-file",
+          //   routerLink: ["/product/order-summary"],
+          // },
         ],
       },
       {
@@ -67,6 +84,19 @@ export class AppMenuComponent implements OnInit {
             routerLink: ["/categories"],
           },
         ],
+        visible: this.authService.roleCheck("ADMIN"),
+      },
+      {
+        label: "Orders",
+        icon: "pi pi-fw pi-cog",
+        items: [
+          {
+            label: "View Orders",
+            icon: "pi pi-fw pi-list",
+            routerLink: ["/orders"],
+          },
+        ],
+        visible: this.authService.roleCheck("ADMIN"),
       },
       {
         label: "Users",

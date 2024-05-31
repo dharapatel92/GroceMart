@@ -6,6 +6,14 @@ import { AppSidebarComponent } from "../sidebar/app.sidebar.component";
 import { SidebarModule } from "primeng/sidebar";
 import { CartComponent } from "../cart/cart.component";
 import { CartService } from "../../core/services/cart.service";
+import { FormControl } from "@angular/forms";
+import {
+  Observable,
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+} from "rxjs";
+import { ProductService } from "../../core/services/product.service";
 
 @Component({
   selector: "app-topbar",
@@ -21,17 +29,31 @@ export class AppTopbarComponent {
   isLoggedIn: boolean = false;
   isSidebarCartVisible: boolean = false;
   itemsCount = 0;
+  searchControl = new FormControl("");
+
   constructor(
     public layoutService: LayoutService,
     public authService: AuthService,
     public el: ElementRef,
-    private cartService: CartService
-  ) {}
+    private cartService: CartService,
+    private productService: ProductService
+  ) {
+    this.searchControl.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((searchItem) => {
+        console.log(searchItem);
+        productService.searchProducts(searchItem || "");
+      });
+  }
+
   ngOnInit() {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.cartService.cartItemsCount$.subscribe(
       (count) => (this.itemsCount = count)
     );
+    this.cartService.isSidebarCartVisible$.subscribe((val) => {
+      this.isSidebarCartVisible = val;
+    });
   }
 
   onMenuButtonClick() {

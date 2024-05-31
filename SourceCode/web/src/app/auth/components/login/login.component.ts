@@ -6,6 +6,7 @@ import { AuthService } from "../../services/auth.service";
 import { LoaderService } from "../../../core/services/loader.service";
 import { SelectButtonModule } from "primeng/selectbutton";
 import { MessageService } from "primeng/api";
+import { CartService } from "../../../core/services/cart.service";
 
 @Component({
   selector: "app-login",
@@ -29,13 +30,14 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router,
     private loaderService: LoaderService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
     this.signInForm = this.fb.group({
-      email: ["test@test.com", [Validators.required, Validators.email]],
-      password: ["test@123", Validators.required],
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", Validators.required],
     });
   }
 
@@ -58,7 +60,13 @@ export class LoginComponent {
               }
 
               localStorage.setItem("user", JSON.stringify(res.data));
-              this.router.navigate(["/product"]);
+              if (res.data?.roles?.[0] === "CUSTOMER") {
+                this.cartService.setCustomerCartInfo();
+                this.router.navigate(["/product"]);
+              } else {
+                this.router.navigate(["/dashboard"]);
+              }
+
               this.messageService.add({
                 severity: "success",
                 summary: "Success",

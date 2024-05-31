@@ -5,32 +5,35 @@ import { SharedModule } from "../../shared/shared.module";
 import { CartService } from "../../core/services/cart.service";
 import { MessageService } from "primeng/api";
 import { Router } from "@angular/router";
+import { ProgressSpinnerModule } from "primeng/progressspinner";
 
-interface Cart {
+export interface Cart {
   orderId: number;
   amount: number;
   totalqty: number;
-  orderDetailsDTOList: { id: number; product: Product; quantity: number }[];
+  orderDetailsDTOList: Order[];
   userId: number;
   status: "In_CART";
 }
 
+type Order = { id: number; product: Product; quantity: number };
+
 @Component({
   selector: "app-cart",
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, ProgressSpinnerModule],
   templateUrl: "./cart.component.html",
   styleUrl: "./cart.component.scss",
 })
 export class CartComponent {
   products!: Cart | null;
-
   categoryId: number = 1;
+  isLoading = false;
 
   constructor(
     private cartService: CartService,
     private messageService: MessageService,
-    public router: Router
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -38,54 +41,61 @@ export class CartComponent {
   }
 
   getProductList() {
+    this.isLoading = true;
     this.cartService.getCartItems().subscribe({
       next: (res: any) => {
         console.log(res);
         this.products = res.data?.[0];
+        this.isLoading = false;
         console.log("this.products: ", this.products);
       },
     });
   }
 
-  onCheckout() {
-    this.cartService.setCheckoutStatus().subscribe({
+  navigateToProductsList() {
+    this.router.navigate(["product"]);
+    this.cartService.hideCart();
+  }
+
+  hideCart() {
+    this.cartService.hideCart();
+  }
+
+  setQty(order: any, quantity: number) {
+    console.log(quantity);
+    console.log(order);
+    this.cartService.setProductQuantity(order.product.id, quantity).subscribe({
       next: (res: any) => {
-        console.log(res);
-        this.cartService.cartItemsCount$.next(0);
-        this.cartService.emptyCart();
-        this.products = null;
-        this.messageService.add({
-          severity: "success",
-          summary: "Success",
-          detail: res?.data?.message || "Checkout done successfully",
-        });
-        this.router.navigate(["product", "checkout"]);
+        if (!res.data) return;
+        const data = res.data as Cart;
+        this.cartService.cartItemsCount$.next(data?.totalqty);
+        this.products = data;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.log(err);
-        this.messageService.add({
-          severity: "error",
-          summary: "Error",
-          detail: err?.message || "Checkout Failed",
-        });
       },
     });
   }
 
-  setQty(inputEvent: any, order: any) {
-    console.log(inputEvent);
-    console.log(order);
+  increment(order: Order) {
+    order.quantity++;
     this.cartService
-      .setProductQuantity(order.product.id, inputEvent.value)
-      .subscribe({
-        next: (res: any) => {
-          const data = res.data as Cart;
-          this.cartService.cartItemsCount$.next(data.totalqty);
-          this.products = data;
-        },
-        error: (err: any) => {
-          console.log(err);
-        },
+      .setProductQuantity(order.product.id, 0)
+      .subscribe((res: any) => {
+        if (res) {
+          this.setQty(order, order.quantity);
+        }
+      });
+  }
+
+  decrement(order: Order) {
+    order.quantity--;
+    this.cartService
+      .setProductQuantity(order.product.id, 0)
+      .subscribe((res: any) => {
+        if (res) {
+          this.setQty(order, order.quantity);
+        }
       });
   }
 
@@ -94,7 +104,7 @@ export class CartComponent {
       this.cartService.setProductQuantity(productId, 0).subscribe({
         next: (res: any) => {
           const data = res.data as Cart;
-          this.cartService.cartItemsCount$.next(data.totalqty);
+          this.cartService.cartItemsCount$.next(data?.totalqty);
           this.products = data;
           this.messageService.add({
             severity: "success",

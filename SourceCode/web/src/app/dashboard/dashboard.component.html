@@ -1,0 +1,175 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="grid" style="margin: -1rem">
+      <div class="col-12 sm:col">
+        <div
+          class="card surface-card text-500 flex justify-content-between pt-4 h-full"
+          style="min-width: 17rem"
+        >
+          <div class="overview-info">
+            <h6 class="m-0 mb-1 text-500">Total Customer</h6>
+            <h1 class="m-0 text-500">{{ totalCustomer }}</h1>
+          </div>
+          <i class="pi pi-chart-line text-3xl"></i>
+        </div>
+      </div>
+      <div class="col-12 sm:col">
+        <div
+          class="card text-0 flex justify-content-between pt-4 h-full"
+          style="background-color: var(--primary-color); min-width: 17rem"
+        >
+          <div class="overview-info">
+            <h6 class="m-0 mb-1 text-0">Total Vendor</h6>
+            <h1 class="m-0 text-0">{{ totalVendor }}</h1>
+          </div>
+          <i class="pi pi-box text-3xl"></i>
+        </div>
+      </div>
+      <div class="col-12 sm:col">
+        <div
+          class="card bg-gray-400 text-white flex justify-content-between pt-4 h-full"
+          style="min-width: 17rem"
+        >
+          <div class="overview-info">
+            <h6 class="m-0 mb-1 text-white">Total Product</h6>
+            <h1 class="m-0 text-white">{{ totalProduct }}</h1>
+          </div>
+          <i class="pi pi-envelope text-3xl"></i>
+        </div>
+      </div>
+      <div class="col-12 sm:col">
+        <div
+          class="card bg-gray-600 text-white flex justify-content-between pt-4 h-full"
+          style="min-width: 17rem"
+        >
+          <div class="overview-info">
+            <h6 class="m-0 mb-1 text-white">Total Order</h6>
+            <h1 class="m-0 text-white">{{ totalOrder }}</h1>
+          </div>
+          <i class="pi pi-chart-bar text-3xl"></i>
+        </div>
+      </div>
+      <div class="col-12 sm:col">
+        <div
+          class="card text-white flex justify-content-between pt-4 h-full"
+          style="
+            background: linear-gradient(90deg, #ffb340 0%, #ffa740 100%);
+            min-width: 17rem;
+          "
+        >
+          <div class="overview-info">
+            <h6 class="m-0 mb-1 text-white">Total Sales</h6>
+            <h1 class="m-0 text-white">{{ totalSales }}</h1>
+          </div>
+          <i class="pi pi-dollar text-3xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 xl:col-12">
+    <div class="card">
+      <div class="card-header gap-3">
+        <div class="card-title">
+          <h6>Orders</h6>
+          <p class="subtitle">
+            Your <b>{{ selectedDate.name }}</b> sales order data from
+            <b>{{
+              selectedDate.code == "DAY"
+                ? orders.dailyData.dateRange
+                : selectedDate.code == "WEEK"
+                ? orders.weeklyData.dateRange
+                : orders.monthlyData.dateRange
+            }}</b>
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <p-dropdown
+            [options]="orderStatusOptions"
+            [(ngModel)]="orderStatus"
+            placeholder="Order Status"
+            [showClear]="false"
+            styleClass="w-11rem"
+            (onChange)="getAdminReport()"
+          ></p-dropdown>
+          <p-dropdown
+            [options]="dateRanges"
+            [(ngModel)]="selectedDate"
+            placeholder="Monthly"
+            optionLabel="name"
+            [showClear]="false"
+            styleClass="w-9rem"
+            (onChange)="onDateChangeBarChart()"
+          ></p-dropdown>
+        </div>
+      </div>
+      <div class="chart-info mb-3 flex align-items-center gap-5 flex-wrap">
+        <div class="info">
+          <h6 class="m-0 mb-1 text-color-secondary font-normal">
+            Total Sales Order Value
+          </h6>
+          <p class="m-0 p-0 font-bold">
+            {{ sumOf(orders.monthlyData.orders) }}
+          </p>
+        </div>
+        <!-- <div class="info">
+          <h6 class="m-0 mb-1 text-color-secondary font-normal">Total Units</h6>
+          <p class="m-0 p-0 font-bold">
+            {{
+              selectedDate.code == "DAY"
+                ? sumOf(orders.dailyData.orderUnits)
+                : selectedDate.code == "WEEK"
+                ? sumOf(orders.weeklyData.orderUnits)
+                : sumOf(orders.monthlyData.orderUnits)
+            }}
+          </p>
+        </div>
+        <div class="info">
+          <h6 class="m-0 mb-1 text-color-secondary font-normal">Total Sales</h6>
+          <p class="m-0 p-0 font-bold">
+            {{
+              selectedDate.code == "DAY"
+                ? orders.dailyData.totalSales
+                : selectedDate.code == "WEEK"
+                ? orders.weeklyData.totalSales
+                : orders.monthlyData.totalSales
+            }}
+          </p>
+        </div>
+        <div class="info">
+          <h6 class="m-0 mb-1 text-color-secondary font-normal">
+            Avg. sales/orders item
+          </h6>
+          <p class="m-0 p-0 font-bold">
+            {{
+              selectedDate.code == "DAY"
+                ? orders.dailyData.avarageSalesByOrder
+                : selectedDate.code == "WEEK"
+                ? orders.weeklyData.avarageSalesByOrder
+                : orders.monthlyData.avarageSalesByOrder
+            }}
+          </p>
+        </div>
+        <div class="info">
+          <h6 class="m-0 mb-1 text-color-secondary font-normal">
+            Avg. units/orders item
+          </h6>
+          <p class="m-0 p-0 font-bold">
+            {{
+              selectedDate.code == "DAY"
+                ? orders.dailyData.avarageUnitByOrder
+                : selectedDate.code == "WEEK"
+                ? orders.weeklyData.avarageUnitByOrder
+                : orders.monthlyData.avarageUnitByOrder
+            }}
+          </p>
+        </div> -->
+      </div>
+      <p-chart
+        type="bar"
+        height="530"
+        [data]="chartData"
+        [options]="chartOptions"
+      ></p-chart>
+    </div>
+  </div>
+</div>

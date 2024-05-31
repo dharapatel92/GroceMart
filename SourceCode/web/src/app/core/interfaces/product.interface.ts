@@ -11,4 +11,6 @@ export interface Product {
   isDelete?: boolean;
   isActive?: boolean;
   qty: number;
+  disPercentage?: number;
+  originalPrice?: number;
 }

@@ -1,26 +1,30 @@
+<div class="flex justify-content-between">
+  <div class="text-900 font-medium text-4xl mb-4">Popular Products</div>
+  <p-dropdown
+    class="ml-auto"
+    appendTo="body"
+    [options]="categoryList"
+    [(ngModel)]="categoryId"
+    optionValue="id"
+    optionLabel="categoryName"
+    placeholder="Select a category"
+    (onChange)="getProductList()"
+  />
+</div>
+<!-- <p class="mt-0 p-0 mb-5 text-700 text-2xl">Exclusive Selection</p> -->
 <div class="card">
-  <div class="flex">
-    <div class="text-900 font-medium text-4xl mb-4">Popular Products</div>
-    <p-dropdown
-      class="ml-auto"
-      appendTo="body"
-      [options]="categoryList"
-      [(ngModel)]="categoryId"
-      optionValue="id"
-      optionLabel="categoryName"
-      placeholder="Select a category"
-      (onChange)="getProductList()"
-    />
-  </div>
-  <!-- <p class="mt-0 p-0 mb-5 text-700 text-2xl">Exclusive Selection</p> -->
-  <div class="card">
-    <div class="grid -mt-3 -ml-3 -mr-3">
+  <div class="grid -mt-3 -ml-3 -mr-3">
+    <ng-container *ngIf="products?.length == 0; else showProducts">
+      <h3 class="m-0">Products Not Found!!</h3>
+    </ng-container>
+
+    <ng-template #showProducts>
       <div
-        class="col-12 md:col-6 lg:col-3 mb-5 lg:mb-0"
+        class="col-12 md:col-6 lg:col-3 mb-5 lg:mb-0 product"
         *ngFor="let product of products"
         [routerLink]="['/product/product-view/', product.id]"
       >
-        <div class="mb-3 relative">
+        <div class="mb-3 relative w-full">
           <img [src]="product.image" class="w-full" />
           @if(authService.roleCheck("ADMIN") ||
           authService.roleCheck("VENDOR")){
@@ -31,7 +35,7 @@
             <button
               type="button"
               pRipple
-              class="border-1 border-white border-round py-2 px-3 bg-black-alpha-30 text-white inline-flex align-items-center justify-content-center hover:bg-black-alpha-40 transition-colors transition-duration-300 cursor-pointer"
+              class="border-1 border-white border-round py-2 px-3 bg-black-alpha-50 text-white inline-flex align-items-center justify-content-center hover:bg-black-alpha-40 transition-colors transition-duration-300 cursor-pointer"
               [routerLink]="['product-edit', product.id]"
               (click)="$event.stopPropagation()"
             >
@@ -41,7 +45,7 @@
             <button
               type="button"
               pRipple
-              class="border-1 border-white border-round py-2 px-3 bg-black-alpha-30 text-white inline-flex align-items-center justify-content-center hover:bg-black-alpha-40 transition-colors transition-duration-300 cursor-pointer"
+              class="border-1 border-white border-round py-2 px-3 bg-black-alpha-50 text-white inline-flex align-items-center justify-content-center hover:bg-black-alpha-40 transition-colors transition-duration-300 cursor-pointer"
               (click)="deleteProduct(product.id); $event.stopPropagation()"
             >
               <i class="pi pi-trash mr-3 text-base"></i>
@@ -65,9 +69,14 @@
           <span class="text-xl text-900 font-medium mb-3">{{
             product.productName
           }}</span>
-          <span class="text-xl text-900 mb-3">${{ product.salePrice }}</span>
+          <div class="flex justify-content-center gap-3">
+            <ng-container *ngIf="product.originalPrice">
+              <s class="text-xl text-900 mb-3">${{ product.originalPrice }}</s>
+            </ng-container>
+            <span class="text-xl text-900 mb-3">${{ product.salePrice }}</span>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-template>
   </div>
 </div>

@@ -5,7 +5,9 @@
     <div
       class="flex flex-column align-items-center justify-content-center w-full md:w-4 h-full text-center py-6 px-4"
     >
-      <a [routerLink]="['/']" class="mb-3 text-xl"> Groce Mart </a>
+      <a [routerLink]="['/']" class="mb-3 text-xl">
+        <img src="/assets/logo.png" alt="Logo" class="logo" />
+      </a>
 
       <p-selectButton [options]="loginRolesOptions" [(ngModel)]="activeRole" />
 
@@ -58,7 +60,7 @@
           <a
             routerLink="/auth/forgot-password"
             class="font-medium text-sm text-300"
-            >forget password?</a
+            >forgot password?</a
           >
           <p class="font-medium text-400 m-0 mt-6">
             Don't you have an account,

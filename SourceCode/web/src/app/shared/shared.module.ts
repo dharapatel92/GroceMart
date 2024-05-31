@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { TranslateModule } from "@ngx-translate/core";
 import { NgxResizeObserverModule } from "ngx-resize-observer";
+import { MessageService } from "primeng/api";
+import { ToastModule } from "primeng/toast";
 import { DataFormatComponent } from "./components/data-format/data-format.component";
 import { FormErrorsComponent } from "./components/form-errors/form-errors.component";
 import { LoaderComponent } from "./components/loader/loader.component";
@@ -22,8 +24,6 @@ import { LoadingTableComponent } from "./loading-table/loading-table.component";
 import { PrimengModule } from "./module/primeng/primeng.module";
 import { NoDataInTableComponent } from "./no-data-in-table/no-data-in-table.component";
 import { SingleCallFunctionPipe } from "./pipes/single-call-function.pipe";
-import { ToastModule } from "primeng/toast";
-import { MessageService } from "primeng/api";
 
 const components: any[] = [
   DataFormatComponent,

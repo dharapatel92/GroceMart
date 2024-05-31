@@ -1,0 +1,26 @@
+<div class="flex flex-column align-items-center">
+  <div class="card" style="width: 50rem">
+    <p-table [value]="products">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Product Name</th>
+          <th>Promotion Applied</th>
+          <th>Edit</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>{{ product.productName }}</td>
+          <td>{{ product.disPercentage }} %</td>
+          <td class="flex">
+            <i
+              class="pi pi-pencil mr-2 cursor-pointer"
+              style="font-size: 1.2rem"
+              [routerLink]="['/product', 'edit-promotion', product.id]"
+            ></i>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

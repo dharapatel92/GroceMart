@@ -1,0 +1,33 @@
+<div class="flex flex-column align-items-center">
+  <div class="card" style="width: 50rem">
+    <p-table [value]="orders">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Order Id</th>
+          <th>User Id</th>
+          <th>Product x Quantity</th>
+          <th>Total Quantity</th>
+          <th>Total Amount</th>
+          <th>Set Status</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-order>
+        <tr>
+          <td>{{ order?.orderId }}</td>
+          <td>{{ order?.userId }}</td>
+          <td>{{ getProductsInfo(order?.orderDetailsDTOList) }}</td>
+          <td>{{ order?.totalqty }}</td>
+          <td>${{ order?.amount }}</td>
+          <td>
+            <button
+              pButton
+              pRipple
+              label="COMPLETED"
+              (click)="setOrderStatusAsCompleted(order?.orderId)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

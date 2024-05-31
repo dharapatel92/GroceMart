@@ -74,7 +74,7 @@ export class ProductAddUpdateComponent {
           console.log("res: ", res);
           const productData: Product = res.data;
           this.product = productData;
-          this.getConvertedImageUrlToFile(this.product.image);
+          // this.getConvertedImageUrlToFile(this.product.image);
         },
         error: (err) => {
           this.loaderService.hide();

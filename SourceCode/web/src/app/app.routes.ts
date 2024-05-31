@@ -1,5 +1,6 @@
 import { Routes } from "@angular/router";
 import { Error404Component } from "./errors/error404/error404.component";
+import { PromotionViewComponent } from "./product/promotion/promotion-view.component";
 
 export const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "product" },
@@ -30,6 +31,20 @@ export const routes: Routes = [
       import("./auth/components/reset-password/reset-password.component").then(
         (m) => m.ResetPasswordComponent
       ),
+  },
+  {
+    path: `dashboard`,
+    loadComponent: () =>
+      import("./layout/app.layout.component").then((m) => m.AppLayoutComponent),
+    children: [
+      {
+        path: ``,
+        loadComponent: () =>
+          import("./dashboard/dashboard.component").then(
+            (m) => m.DashboardComponent
+          ),
+      },
+    ],
   },
   {
     path: "product",
@@ -65,25 +80,46 @@ export const routes: Routes = [
           ).then((m) => m.ProductAddUpdateComponent),
       },
       {
+        path: `promotion-view`,
+        loadComponent: () =>
+          import("./product/promotion/promotion-view.component").then(
+            (m) => m.PromotionViewComponent
+          ),
+      },
+      {
+        path: `edit-promotion/:id`,
+        loadComponent: () =>
+          import("./product/update-promotion/update-promotion.component").then(
+            (m) => m.UpdatePromotionComponent
+          ),
+      },
+      {
         path: `checkout`,
         loadComponent: () =>
-          import(
-            "./product/checkout/checkout.component"
-          ).then((m) => m.CheckoutComponent),
+          import("./product/checkout/checkout.component").then(
+            (m) => m.CheckoutComponent
+          ),
       },
       {
         path: `order-history`,
         loadComponent: () =>
-          import(
-            "./product/order-history/order-history.component"
-          ).then((m) => m.OrderHistoryComponent),
+          import("./product/order-history/order-history.component").then(
+            (m) => m.OrderHistoryComponent
+          ),
       },
       {
         path: `order-summary`,
         loadComponent: () =>
-          import(
-            "./product/order-summary/order-summary.component"
-          ).then((m) => m.OrderSummaryComponent),
+          import("./product/order-summary/order-summary.component").then(
+            (m) => m.OrderSummaryComponent
+          ),
+      },
+      {
+        path: `payment`,
+        loadComponent: () =>
+          import("./product/payment/payment.component").then(
+            (m) => m.PaymentComponent
+          ),
       },
     ],
   },
@@ -111,6 +147,20 @@ export const routes: Routes = [
         loadComponent: () =>
           import("./category/add-category/add-category.component").then(
             (m) => m.AddCategoryComponent
+          ),
+      },
+    ],
+  },
+  {
+    path: "orders",
+    loadComponent: () =>
+      import("./layout/app.layout.component").then((m) => m.AppLayoutComponent),
+    children: [
+      {
+        path: ``,
+        loadComponent: () =>
+          import("./product/orders/orders.component").then(
+            (m) => m.OrdersComponent
           ),
       },
     ],
