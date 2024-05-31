@@ -1,0 +1,20 @@
+.footer {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+
+  .social-icons {
+    margin-bottom: 20px;
+
+    a {
+      margin: 0 5px;
+      color: #fff;
+    }
+  }
+
+  .footer-text p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+}

@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
+import { AuthService } from "../../auth/services/auth.service";
 import { Product } from "../../core/interfaces/product.interface";
+import { CartService } from "../../core/services/cart.service";
+import { LoaderService } from "../../core/services/loader.service";
 import { ProductService } from "../../core/services/product.service";
 import { SharedModule } from "../../shared/shared.module";
-import { AuthService } from "../../auth/services/auth.service";
-import { LoaderService } from "../../core/services/loader.service";
-import { CartService } from "../../core/services/cart.service";
 
 @Component({
   selector: "app-product-list",
@@ -76,7 +76,7 @@ export class ProductListComponent {
     if (productId)
       this.cartService.addToCart(productId).subscribe((res: any) => {
         if (res) {
-          this.cartService.cartItemsCount$.next(res.data.totalqty);
+          this.cartService.cartItemsCount$.next(res.data?.totalqty);
           this.cartService.showCart();
           this.cartService.setOrderId(res.data?.orderId);
         }

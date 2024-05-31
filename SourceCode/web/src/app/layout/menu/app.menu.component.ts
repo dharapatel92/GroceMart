@@ -51,7 +51,7 @@ export class AppMenuComponent implements OnInit {
           },
           {
             label: "Manage Promotion",
-            icon: "pi pi-fw pi-plus",
+            icon: "pi pi-fw pi-money-bill",
             routerLink: ["/product/promotion-view"],
             visible:
               this.authService.roleCheck("ADMIN") ||
@@ -96,7 +96,9 @@ export class AppMenuComponent implements OnInit {
             routerLink: ["/orders"],
           },
         ],
-        visible: this.authService.roleCheck("ADMIN"),
+        visible:
+          this.authService.roleCheck("ADMIN") ||
+          this.authService.roleCheck("VENDOR"),
       },
       {
         label: "Users",

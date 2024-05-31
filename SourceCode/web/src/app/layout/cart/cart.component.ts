@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
-import { Product } from "../../core/interfaces/product.interface";
-import { ProductService } from "../../core/services/product.service";
-import { SharedModule } from "../../shared/shared.module";
-import { CartService } from "../../core/services/cart.service";
-import { MessageService } from "primeng/api";
 import { Router } from "@angular/router";
+import { MessageService } from "primeng/api";
 import { ProgressSpinnerModule } from "primeng/progressspinner";
+import { Debounce } from "../../core/decorators/debounce.decorator";
+import { Product } from "../../core/interfaces/product.interface";
+import { CartService } from "../../core/services/cart.service";
+import { SharedModule } from "../../shared/shared.module";
 
 export interface Cart {
   orderId: number;
@@ -61,43 +61,56 @@ export class CartComponent {
     this.cartService.hideCart();
   }
 
-  setQty(order: any, quantity: number) {
-    console.log(quantity);
-    console.log(order);
-    this.cartService.setProductQuantity(order.product.id, quantity).subscribe({
-      next: (res: any) => {
-        if (!res.data) return;
-        const data = res.data as Cart;
-        this.cartService.cartItemsCount$.next(data?.totalqty);
-        this.products = data;
-      },
-      error: (err: any) => {
-        console.log(err);
-      },
-    });
-  }
+  @Debounce(300)
+  setQty(inputEvent: any, order: any) {
+    const difference = inputEvent.value - order.quantity;
 
-  increment(order: Order) {
-    order.quantity++;
     this.cartService
-      .setProductQuantity(order.product.id, 0)
-      .subscribe((res: any) => {
-        if (res) {
-          this.setQty(order, order.quantity);
-        }
+      .setProductQuantity(order.product.id, inputEvent.value)
+      .subscribe({
+        next: (res: any) => {
+          if (!res.data) {
+            this.messageService.add({
+              severity: "error",
+              summary: "Error",
+              detail:
+                "Cannot add more quantity. It is more than available stock.",
+            });
+            inputEvent.writeValue(inputEvent.value - difference);
+            return;
+          }
+          const data = res.data as Cart;
+          this.cartService.cartItemsCount$.next(data?.totalqty);
+          this.products = data;
+        },
+        error: (err: any) => {
+          console.log(err);
+          inputEvent.writeValue(inputEvent.value - difference);
+        },
       });
   }
 
-  decrement(order: Order) {
-    order.quantity--;
-    this.cartService
-      .setProductQuantity(order.product.id, 0)
-      .subscribe((res: any) => {
-        if (res) {
-          this.setQty(order, order.quantity);
-        }
-      });
-  }
+  // increment(order: Order) {
+  //   order.quantity++;
+  //   this.cartService
+  //     .setProductQuantity(order.product.id, 0)
+  //     .subscribe((res: any) => {
+  //       if (res) {
+  //         this.setQty(order, order.quantity);
+  //       }
+  //     });
+  // }
+
+  // decrement(order: Order) {
+  //   order.quantity--;
+  //   this.cartService
+  //     .setProductQuantity(order.product.id, 0)
+  //     .subscribe((res: any) => {
+  //       if (res) {
+  //         this.setQty(order, order.quantity);
+  //       }
+  //     });
+  // }
 
   removeItemFromCart(productId: number | undefined) {
     if (productId)

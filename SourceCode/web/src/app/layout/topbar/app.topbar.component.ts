@@ -1,19 +1,14 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { SidebarModule } from "primeng/sidebar";
+import { debounceTime, distinctUntilChanged } from "rxjs";
 import { AuthService } from "../../auth/services/auth.service";
 import { LayoutService } from "../../core/services/app.layout.service";
-import { SharedModule } from "../../shared/shared.module";
-import { AppSidebarComponent } from "../sidebar/app.sidebar.component";
-import { SidebarModule } from "primeng/sidebar";
-import { CartComponent } from "../cart/cart.component";
 import { CartService } from "../../core/services/cart.service";
-import { FormControl } from "@angular/forms";
-import {
-  Observable,
-  debounceTime,
-  distinctUntilChanged,
-  switchMap,
-} from "rxjs";
 import { ProductService } from "../../core/services/product.service";
+import { SharedModule } from "../../shared/shared.module";
+import { CartComponent } from "../cart/cart.component";
+import { AppSidebarComponent } from "../sidebar/app.sidebar.component";
 
 @Component({
   selector: "app-topbar",
@@ -42,7 +37,7 @@ export class AppTopbarComponent {
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((searchItem) => {
         console.log(searchItem);
-        productService.searchProducts(searchItem || "");
+        this.productService.searchProducts(searchItem || "");
       });
   }
 

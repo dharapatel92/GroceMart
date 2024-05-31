@@ -1,6 +1,5 @@
 import { Routes } from "@angular/router";
 import { Error404Component } from "./errors/error404/error404.component";
-import { PromotionViewComponent } from "./product/promotion/promotion-view.component";
 
 export const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "product" },

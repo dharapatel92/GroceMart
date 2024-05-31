@@ -3,10 +3,10 @@ import { MenuItem } from "primeng/api";
 import { Table } from "primeng/table";
 import { Subscription, debounceTime } from "rxjs";
 import { LayoutService } from "../core/services/app.layout.service";
-import { SharedModule } from "../shared/shared.module";
-import { DashboardService } from "../core/services/dashboard.service";
 import { orderStatus } from "../core/services/cart.service";
+import { DashboardService } from "../core/services/dashboard.service";
 import { LoaderService } from "../core/services/loader.service";
+import { SharedModule } from "../shared/shared.module";
 
 @Component({
   selector: "app-dashboard",

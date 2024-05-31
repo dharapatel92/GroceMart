@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { environment } from "../../../environments/environment";
 import { BehaviorSubject } from "rxjs";
+import { environment } from "../../../environments/environment";
 import { AuthService } from "../../auth/services/auth.service";
 export type orderStatus = "In_CART" | "CHECK_OUT" | "COMPLETED" | "CANCELLED";
 
@@ -15,6 +15,8 @@ export class CartService {
 
   cartItemsCount$ = new BehaviorSubject<number>(0);
   isSidebarCartVisible$ = new BehaviorSubject<boolean>(false);
+  checkOutDetails!: any;
+  paymentDetails!: any;
 
   constructor(
     private httpClient: HttpClient,
@@ -84,8 +86,6 @@ export class CartService {
     return this.callAddToCartApi(productId);
   }
 
-  // clearProductQuantity
-
   setOrderStatus(status: orderStatus, orderId?: number) {
     let params = new HttpParams().set("status", status);
     return this.httpClient.put(
@@ -100,6 +100,19 @@ export class CartService {
     return this.httpClient.get(`${environment.API_URL}getAllOrders`, {
       params,
     });
+  }
+
+  checkOut() {
+    const checkoutDetails = {
+      ...this.checkOutDetails,
+      ...this.paymentDetails,
+    };
+    console.log("checkoutDetails: ", checkoutDetails);
+    if (!Object.keys(checkoutDetails).length) return;
+    return this.httpClient.put(
+      `${environment.API_URL}update/checkOut`,
+      checkoutDetails
+    );
   }
 
   emptyCart() {

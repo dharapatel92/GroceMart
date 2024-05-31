@@ -52,12 +52,12 @@
           <input
             id="name"
             placeholder="First Name"
-            formControlName="firstName"
+            formControlName="getfName"
             type="text"
             class="p-inputtext w-full"
           />
           <div
-            *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+            *ngIf="getfName.invalid && (getfName.dirty || getfName.touched)"
             class="error-message"
           >
             This field is required!
@@ -67,12 +67,12 @@
           <input
             id="lastname"
             placeholder="Last Name"
-            formControlName="lastName"
+            formControlName="getlName"
             type="text"
             class="p-inputtext w-full"
           />
           <div
-            *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
+            *ngIf="getlName.invalid && (getlName.dirty || getlName.touched)"
             class="error-message"
           >
             This field is required!
@@ -82,6 +82,21 @@
           <input
             id="address"
             placeholder="Address"
+            formControlName="address"
+            type="text"
+            class="p-inputtext w-full"
+          />
+          <div
+            *ngIf="address.invalid && (address.dirty || address.touched)"
+            class="error-message"
+          >
+            This field is required!
+          </div>
+        </div>
+        <div class="col-12 field mb-4">
+          <input
+            id="address2"
+            placeholder="Apartment, suite, etc"
             formControlName="address1"
             type="text"
             class="p-inputtext w-full"
@@ -93,33 +108,16 @@
             This field is required!
           </div>
         </div>
-        <div class="col-12 field mb-4">
-          <input
-            id="address2"
-            placeholder="Apartment, suite, etc"
-            formControlName="address2"
-            type="text"
-            class="p-inputtext w-full"
-          />
-          <div
-            *ngIf="address2.invalid && (address2.dirty || address2.touched)"
-            class="error-message"
-          >
-            This field is required!
-          </div>
-        </div>
         <div class="col-12 lg:col-6 field mb-4">
           <input
             id="pc"
             placeholder="Postal Code"
-            formControlName="postalCode"
+            formControlName="code"
             type="text"
             class="p-inputtext w-full"
           />
           <div
-            *ngIf="
-              postalCode.invalid && (postalCode.dirty || postalCode.touched)
-            "
+            *ngIf="code.invalid && (code.dirty || code.touched)"
             class="error-message"
           >
             This field is required!
@@ -155,6 +153,7 @@
           class="col-12 flex flex-column lg:flex-row justify-content-center align-items-center lg:justify-content-end my-6"
         >
           <button
+            type="button"
             pButton
             pRipple
             type="button"
@@ -198,7 +197,7 @@
                 product?.product?.productName
               }}</span>
               <span class="text-900 font-bold"
-                >${{ product?.product?.price }}</span
+                >${{ product?.product?.salePrice }}</span
               >
             </div>
             <!-- <div class="text-600 text-sm mb-3">Black | Large</div> -->
@@ -217,7 +216,8 @@
                 incrementButtonClass="p-button-text text-600 hover:text-primary py-1 px-1"
                 incrementButtonIcon="pi pi-plus"
                 decrementButtonIcon="pi pi-minus"
-                (onInput)="setQty($event, product)"
+                #qtyRef
+                (ngModelChange)="setQty(qtyRef, product)"
               ></p-inputNumber>
               <button
                 pButton
@@ -225,6 +225,7 @@
                 icon="pi pi-trash"
                 class="p-button-text p-button-rounded"
                 (click)="removeItemFromCart(product.product.id)"
+                type="button"
               ></button>
             </div>
           </div>
@@ -253,7 +254,7 @@
       <div class="py-2 mt-3">
         <div class="flex justify-content-between align-items-center mb-3">
           <span class="text-900 font-medium">Subtotal</span>
-          <span class="text-900">${{ products?.amount }}</span>
+          <span class="text-900">${{ products.amount }}</span>
         </div>
         <div class="flex justify-content-between align-items-center mb-3">
           <span class="text-900 font-medium">Shipping</span>
@@ -262,7 +263,7 @@
         <div class="flex justify-content-between align-items-center mb-3">
           <span class="text-900 font-bold">Total</span>
           <span class="text-900 font-medium text-xl"
-            >${{ products?.amount }}</span
+            >${{ products.amount }}</span
           >
         </div>
       </div>

@@ -17,7 +17,10 @@ export class UpdatePromotionComponent {
   productId!: number;
   product = new FormGroup({
     productName: new FormControl({ value: "", disabled: true }),
-    disPercentage: new FormControl(0, Validators.required),
+    disPercentage: new FormControl(0, [
+      Validators.required,
+      Validators.max(100),
+    ]),
   });
   constructor(
     private productService: ProductService,

@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { MessageService } from "primeng/api";
 import { AuthService } from "../auth/services/auth.service";
 import { LoaderService } from "../core/services/loader.service";
 import { SharedModule } from "../shared/shared.module";
-import { MessageService } from "primeng/api";
 
 @Component({
   selector: "app-profile",

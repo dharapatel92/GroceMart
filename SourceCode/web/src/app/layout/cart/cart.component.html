@@ -32,8 +32,8 @@
                 </div>
               </div>
               <div class="flex justify-content-between align-items-center">
-                <!-- <p-inputNumber
-                  [ngModel]="product?.quantity"
+                <p-inputNumber
+                  [ngModel]="product.quantity"
                   [showButtons]="true"
                   buttonLayout="horizontal"
                   spinnerMode="horizontal"
@@ -43,10 +43,10 @@
                   incrementButtonClass="p-button-text"
                   incrementButtonIcon="pi pi-plus"
                   decrementButtonIcon="pi pi-minus"
-                  (click)="$event.stopPropagation()"
-                  (onInput)="setQty($event, product)"
-                ></p-inputNumber> -->
-                <div class="button-container">
+                  #qtyRef
+                  (ngModelChange)="setQty(qtyRef, product)"
+                ></p-inputNumber>
+                <!-- <div class="button-container">
                   <button class="p-button" (click)="decrement(product)">
                     -
                   </button>
@@ -54,7 +54,7 @@
                   <button class="p-button" (click)="increment(product)">
                     +
                   </button>
-                </div>
+                </div> -->
 
                 <i
                   class="pi pi-trash cursor-pointer"

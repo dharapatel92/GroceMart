@@ -29,7 +29,9 @@ export class CategoryService {
 
   deleteCategory(categoryid: number) {
     let userData;
-    userData = JSON.parse(localStorage.getItem("user") || "");
+    try {
+      userData = JSON.parse(localStorage.getItem("user") || "");
+    } catch (error) {}
     const userId = userData?.id;
     return this.httpClient.delete(
       `${environment.API_URL}product/category/${categoryid}/${userId}`

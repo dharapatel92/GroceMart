@@ -1,9 +1,11 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ProductService } from "../../core/services/product.service";
-import { SharedModule } from "../../shared/shared.module";
+import { MessageService } from "primeng/api";
 import { CartService } from "../../core/services/cart.service";
+import { ProductService } from "../../core/services/product.service";
 import { Cart } from "../../layout/cart/cart.component";
+import { SharedModule } from "../../shared/shared.module";
+import { Debounce } from "../../core/decorators/debounce.decorator";
 
 @Component({
   selector: "app-product-view",
@@ -16,6 +18,7 @@ export class ProductViewComponent {
   id: number = 0;
   product: any = {};
   color: string = "bluegray";
+  maxQty!: number;
 
   size: string = "M";
 
@@ -28,7 +31,8 @@ export class ProductViewComponent {
   constructor(
     private productService: ProductService,
     private activatedRoute: ActivatedRoute,
-    private cartService: CartService
+    private cartService: CartService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -48,20 +52,29 @@ export class ProductViewComponent {
               (el: any) => el.product.id === this.id
             );
             console.log("prod: ", prod);
-            this.product.quantity = prod?.quantity;
+            this.maxQty = prod?.quantity + prod?.product.qty;
+            this.product.quantity = prod?.quantity || 0;
           });
         },
       });
     });
   }
 
+  @Debounce(300)
   setQty() {
-    console.log(this.product);
     this.cartService
       .setProductQuantity(this.product.id, this.product.quantity)
       .subscribe({
         next: (res: any) => {
-          if (!res.data) return;
+          if (!res.data) {
+            this.messageService.add({
+              severity: "error",
+              summary: "Error",
+              detail:
+                "Cannot add more quantity. It is more than available stock.",
+            });
+            return;
+          }
           const data = res.data as Cart;
           this.cartService.cartItemsCount$.next(data?.totalqty);
         },

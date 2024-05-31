@@ -15,16 +15,16 @@ import { CartService } from "../../core/services/cart.service";
 export class PaymentComponent {
   paymentForm = new FormGroup({
     cardHolderName: new FormControl("", Validators.required),
-    cardNumber: new FormControl("", [
+    cardNo: new FormControl("", [
       Validators.required,
       Validators.maxLength(16),
       Validators.pattern("[0-9]{16}"),
     ]),
-    expiryDate: new FormControl("", [
+    cardExp: new FormControl("", [
       Validators.required,
       Validators.pattern("(0[1-9]|1[0-2])/?([0-9]{4}|[0-9]{2})"),
     ]),
-    cvv: new FormControl("", [
+    cardCVV: new FormControl("", [
       Validators.required,
       Validators.maxLength(3),
       Validators.pattern("[0-9]{3}"),
@@ -34,14 +34,14 @@ export class PaymentComponent {
   get cardHolderName() {
     return this.paymentForm.get("cardHolderName") as FormControl;
   }
-  get cardNumber() {
-    return this.paymentForm.get("cardNumber") as FormControl;
+  get cardNo() {
+    return this.paymentForm.get("cardNo") as FormControl;
   }
-  get expiryDate() {
-    return this.paymentForm.get("expiryDate") as FormControl;
+  get cardExp() {
+    return this.paymentForm.get("cardExp") as FormControl;
   }
-  get cvv() {
-    return this.paymentForm.get("cvv") as FormControl;
+  get cardCVV() {
+    return this.paymentForm.get("cardCVV") as FormControl;
   }
 
   constructor(
@@ -51,31 +51,39 @@ export class PaymentComponent {
   ) {}
 
   checkoutOnPaymentDone() {
-    this.cartService.setOrderStatus("CHECK_OUT").subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.cartService.cartItemsCount$.next(0);
-        this.cartService.emptyCart();
-        this.router.navigate(["/"]);
-        this.messageService.add({
-          severity: "success",
-          summary: "Success",
-          detail: "Order placed successfully",
+    this.cartService.checkOut()?.subscribe({
+      next: () => {
+        this.cartService.setOrderStatus("CHECK_OUT").subscribe({
+          next: (res: any) => {
+            console.log(res);
+            this.cartService.cartItemsCount$.next(0);
+            this.cartService.emptyCart();
+            this.router.navigate(["/"]);
+            this.messageService.add({
+              severity: "success",
+              summary: "Success",
+              detail: "Order placed successfully",
+            });
+          },
+          error: (err) => {
+            console.log(err);
+            this.messageService.add({
+              severity: "error",
+              summary: "Error",
+              detail: err?.message || "Checkout Failed",
+            });
+          },
         });
       },
-      error: (err) => {
+      error: (err: any) => {
         console.log(err);
-        this.messageService.add({
-          severity: "error",
-          summary: "Error",
-          detail: err?.message || "Checkout Failed",
-        });
       },
     });
   }
 
   submitPayment() {
     if (this.paymentForm.valid) {
+      this.cartService.paymentDetails = this.paymentForm.value;
       this.checkoutOnPaymentDone();
     } else {
       this.paymentForm.markAllAsTouched();
