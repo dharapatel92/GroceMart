@@ -1,10 +1,7 @@
 package com.groceMart.utils;
 
-import com.groceMart.dto.common.Response;
-import com.groceMart.utils.exception.ApplicationException;
-import org.apache.commons.lang3.StringUtils;
-
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +10,9 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+
+import com.groceMart.dto.common.Response;
+import com.groceMart.utils.exception.ApplicationException;
 
 public class CommonUtil {
 
@@ -258,6 +258,27 @@ public class CommonUtil {
         // Decode password using Base64
         byte[] decodedBytes = Base64.getDecoder().decode(encodedPassword);
         return new String(decodedBytes);
+    }
+
+    
+    public static String converterDateToString(Date date){
+        String convertedDate = null;
+    try {
+        if (date != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            convertedDate = dateFormat.format(date.getTime());
+        }
+        }catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtil.logError("Error occured while convert date"+e.getMessage());
+		}
+        return convertedDate;
+    }
+    
+    public static double roundToTwoDecimalPlaces(double value) {
+        BigDecimal bd = new BigDecimal(Double.toString(value));
+        bd = bd.setScale(2, RoundingMode.HALF_UP); // Rounds to the nearest neighbor. If equidistant, it rounds up.
+        return bd.doubleValue();
     }
 
 

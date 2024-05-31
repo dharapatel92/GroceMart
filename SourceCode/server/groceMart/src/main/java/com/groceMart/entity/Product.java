@@ -26,6 +26,11 @@ public class Product extends AuditEntityAt {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;
+    
+    @Column( columnDefinition="Decimal(10,2) default '0.0'")
+    private Float disPercentage;
+    
+    private Double originalPrice;
 
     public Long getId() {
         return id;
@@ -122,14 +127,32 @@ public class Product extends AuditEntityAt {
     public void setIsDelete(Boolean isDelete) {
         this.isDelete = isDelete;
     }
+    
+    
 
-    @Override
-    public String toString() {
-        return "Product [id=" + id + ", productName=" + productName + ", productCode=" + productCode + ", price="
-                + price + ", salePrice=" + salePrice + ", image=" + image + ", isActive=" + isActive + ", qty=" + qty
-                + ", isStock=" + isStock + ", description=" + description + ", isDelete=" + isDelete + ", category="
-                + category + "]";
-    }
+    public Float getDisPercentage() {
+		return disPercentage;
+	}
+
+	public void setDisPercentage(Float disPercentage) {
+		this.disPercentage = disPercentage;
+	}
+
+	public Double getOriginalPrice() {
+		return originalPrice;
+	}
+
+	public void setOriginalPrice(Double originalPrice) {
+		this.originalPrice = originalPrice;
+	}
+
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", productName=" + productName + ", productCode=" + productCode + ", price="
+				+ price + ", salePrice=" + salePrice + ", image=" + image + ", isActive=" + isActive + ", qty=" + qty
+				+ ", isStock=" + isStock + ", description=" + description + ", isDelete=" + isDelete + ", category="
+				+ category + ", disPercentage=" + disPercentage + ", originalPrice=" + originalPrice + "]";
+	}
 
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.groceMart.dto.AddCartRequest;
 import com.groceMart.dto.CreateOrUpdateOrderRequest;
+import com.groceMart.dto.OrderCheckOutRequest;
 import com.groceMart.dto.common.OrderStatus;
 import com.groceMart.dto.common.ResponseDTO;
 import com.groceMart.service.OrderService;
@@ -103,5 +104,34 @@ public class OrderController {
         }
         return responseDTO;
     }
+    
+    @GetMapping("/getAllOrders")
+    public ResponseDTO getAllOrders( @RequestParam OrderStatus status) {
 
+        LoggerUtil.logInfo("Entered into getAllOrders");
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            responseDTO = orderService.getAllOrders(status);
+        } catch (Exception e) {
+            responseDTO.setSuccess(Constants.ERROR_CODE);
+            responseDTO.setMessage("Error occurred while getAllOrders");
+            LoggerUtil.logError(e.getMessage());
+        }
+        return responseDTO;
+    }
+
+    @PutMapping("/update/checkOut")
+    public ResponseDTO checkOut(@RequestBody OrderCheckOutRequest checkOutRequest) {
+
+        LoggerUtil.logInfo("Entered into checkOut");
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            responseDTO = orderService.checkOut(checkOutRequest);
+        } catch (Exception e) {
+            responseDTO.setSuccess(Constants.ERROR_CODE);
+            responseDTO.setMessage("Error occurred while checkOut");
+            LoggerUtil.logError(e.getMessage());
+        }
+        return responseDTO;
+    }
 }
